@@ -58,6 +58,8 @@ body
             text-align: center
             font-style: italic
             font-weight: bold
+            span.extra
+                font-size: .8rem
         #question
             text-align: center
             font-size: 1.35rem
@@ -147,13 +149,15 @@ body
                     &.error
                         outline: 1px solid #6b1515
         #indicators
+            margin-top: 1rem
             ul
                 display: flex
                 justify-content: center
                 li
                     color: #999
-                    width: 10px
-                    height: 10px
+                    cursor: pointer
+                    width: 25px
+                    height: 25px
                     margin: 0 10px
                     float: left
                     +transform(scale(1.0))
