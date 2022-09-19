@@ -45,6 +45,7 @@ export default function vmAccounting(settings){
         if(index !== undefined && typeof index == "number") self.questionNumber(index);
         let answered = self.answers[index]
         self.currentQuestion( answered != undefined ? answered : new vmCurrentQuestion(self.questions[self.questionNumber()]));
+        window.scrollTo(0, 0);
     };
 
     self.checkAnswers = function(){

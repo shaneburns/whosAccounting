@@ -13,8 +13,15 @@
     <main>
         <form>
             <div id="currentQuestion" data-bind="with: currentQuestion">
-                <h2 data-bind="text: title"></h2>
+                <h2 data-bind="text: title + ' of ' + $root.questions.length""></span></h2>
                 <div id="question" data-bind="text: description + '?'"></div>
+                
+                <div id="indicators">
+                    <ul data-bind="foreach: $root.questions">
+                        <li data-bind="css: {curr: $index() == $root.questionNumber()}, attr: {title: title}, text: $index() == $root.questionNumber() ? '&#10687;' : '&#10686;', click: () => $root.setQuestion($index())"></li>
+                    </ul>
+                </div>
+
                 <div id="answers">
                     <h3>Cash Entries</h3>
                     <ul id="cash" class="group" data-bind="foreach: cashEntries">
@@ -78,11 +85,6 @@
                 </div>
             </div>
 
-            <div id="indicators">
-                <ul data-bind="foreach: questions">
-                    <li data-bind="css: {curr: $index() == $parent.questionNumber()}, attr: {title: title}, text: $index() == $parent.questionNumber() ? '&#10687;' : '&#10686;', click: () => $parent.setQuestion($index())"></li>
-                </ul>
-            </div>
             <input id="submit" type="submit" data-bind="click: currentQuestion().answered ? next : checkAnswers, value: currentQuestion().answered ? 'Next' : 'Submit'"/>
         </form>
     </main>
