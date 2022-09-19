@@ -80,10 +80,10 @@
 
             <div id="indicators">
                 <ul data-bind="foreach: questions">
-                    <li data-bind="css: {curr: $index() == $parent.questionNumber()}, attr: {title: title}, text: $index() == $parent.questionNumber() ? '&#10687;' : '&#10686;'"></li>
+                    <li data-bind="css: {curr: $index() == $parent.questionNumber()}, attr: {title: title}, text: $index() == $parent.questionNumber() ? '&#10687;' : '&#10686;', click: () => $parent.setQuestion($index())"></li>
                 </ul>
             </div>
-            <input id="submit" type="submit" data-bind="click: checkAnswers, value: 'Submit'"/>
+            <input id="submit" type="submit" data-bind="click: currentQuestion().answered ? next : checkAnswers, value: currentQuestion().answered ? 'Next' : 'Submit'"/>
         </form>
     </main>
 

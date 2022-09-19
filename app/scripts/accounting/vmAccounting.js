@@ -10,15 +10,23 @@ export default function vmAccounting(settings){
      * members
      */////////////////////////////////////////////////////////////
     self.questionSource = settings.url;
+    self.questions = [];
+    self.answers = [];
     /**
      * observables
      */////////////////////////////////////////////////////////////
     self.questionNumber = ko.observable(0);
-    self.questions = ko.observableArray();
     self.currentQuestion = ko.observable(new vmCurrentQuestion());
-    self.answers = ko.observable();
     self.errors = ko.observableArray([]);
 
+
+    self.unfinishedAnswers = function(){
+        let index = self.answers.findIndex(Object.is.bind(null, undefined));
+        //console.log(index);
+        index = index == -1 ? self.answers.findIndex((el, i)=> el != undefined && el.answered == false) : index
+        console.log(index, self.answers.find((el, i)=> el != undefined && el.answered == false));
+        return index;
+    }
     /**
      * methods
      */////////////////////////////////////////////////////////////
@@ -29,7 +37,7 @@ export default function vmAccounting(settings){
             url: self.questionSource,
             dataType: "json",
             success: function(response){
-                self.questions(response);
+                self.questions = response;
                 loader.end('getQuestions');
             }
         });
@@ -37,12 +45,15 @@ export default function vmAccounting(settings){
 
     self.setQuestion = function(index){
         if(index !== undefined && typeof index == "number") self.questionNumber(index);
-        self.currentQuestion(new vmCurrentQuestion(self.questions()[self.questionNumber()]));
+        let answered = self.answers[index]
+        self.currentQuestion( answered != undefined ? answered : new vmCurrentQuestion(self.questions[self.questionNumber()]));
     };
 
     self.checkAnswers = function(){
+        self.answers[self.questionNumber()] = self.currentQuestion();
         if(self.currentQuestion().checkAnswers() == 0){
-            if(self.questions().length -1 > self.questionNumber()){
+            self.currentQuestion().answered = true;
+            if(self.questions.length != self.answers.length || self.unfinishedAnswers() >= 0){
                 new vmModal({
                     title: "Correct!",
                     message: "Click next to continue.",
@@ -51,15 +62,19 @@ export default function vmAccounting(settings){
             }else{
                 new vmModal({
                     title: "You Win!",
-                    message: "That's it for now? Wanna try again?",
-                    buttons: [{ text: "Yes", callback: () => window.location.reload() }, {text: "No", callback: function(){location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE";}}]
+                    message: self.answers.length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
+                    buttons: [
+                        { text: "Yes", callback: () => window.location.reload() }, 
+                        {text: "No", callback: function(){ location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; }
+                    }]
                 });
             }
         }
     };
 
     self.next = function(){
-        self.questionNumber(self.questionNumber()+1);
+        let next = self.answers.length > 0 ? self.unfinishedAnswers() : -1;
+        self.questionNumber(next >= 0 && next <= self.questions.length ? next : self.questionNumber()+1 );
         self.setQuestion();
     }
 

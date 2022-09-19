@@ -12,6 +12,7 @@ export default function vmCurrentQuestion(settings){
     self.correct_answers = null;
     self.cashEntries = [];
     self.accrualEntries = [];
+    self.answered = false
 
     /**
      * methods
