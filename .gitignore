@@ -1,3 +1,5 @@
 app/vendor
 app/.env
 app/scripts/node_modules
+public/scripts/dist
+public/css/dist
