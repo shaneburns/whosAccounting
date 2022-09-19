@@ -1,5 +1,5 @@
 app/vendor
 app/.env
 app/scripts/node_modules
-public_html/scripts/dist
-public_html/css/dist
+public/scripts/dist
+public/css/dist
