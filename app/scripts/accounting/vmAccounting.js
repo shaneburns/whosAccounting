@@ -22,9 +22,7 @@ export default function vmAccounting(settings){
 
     self.unfinishedAnswers = function(){
         let index = self.answers.findIndex(Object.is.bind(null, undefined));
-        //console.log(index);
         index = index == -1 ? self.answers.findIndex((el, i)=> el != undefined && el.answered == false) : index
-        console.log(index, self.answers.find((el, i)=> el != undefined && el.answered == false));
         return index;
     }
     /**
@@ -75,7 +73,7 @@ export default function vmAccounting(settings){
     self.next = function(){
         let next = self.answers.length > 0 ? self.unfinishedAnswers() : -1;
         self.questionNumber(next >= 0 && next <= self.questions.length ? next : self.questionNumber()+1 );
-        self.setQuestion();
+        self.setQuestion(self.questionNumber());
     }
 
     /**\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
