@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $, { ajax } from 'jquery'
 import ko from 'knockout'
 import 'knockout-mapping'
 import vmCurrentQuestion from './vmCurrentQuestion.js'
@@ -25,6 +25,11 @@ export default function vmAccounting(settings){
         index = index == -1 ? self.answers.findIndex((el, i)=> el != undefined && el.answered == false) : index
         return index;
     }
+    self.answersJSON = ko.pureComputed(function() { 
+        return JSON.stringify(self.answers.map(function(answer){
+            return {title: answer.title, description: answer.description, cashEntries: ko.mapping.toJS(answer.cashEntries), accrualEntries: ko.mapping.toJS(answer.accrualEntries)} 
+        }))
+    })
     /**
      * methods
      */////////////////////////////////////////////////////////////
@@ -41,6 +46,21 @@ export default function vmAccounting(settings){
         });
     };
 
+    self.sendAnswers = function(){
+        loader.start('sendAnswers');
+        return $.ajax({
+            type: "post",
+            url: "/home/putResults",
+            data: {results: self.answersJSON()},
+            success: function (response) {
+                loader.end('sendAnswers');
+            },
+            error: function(error){
+                loader.end('sendAnswers');
+            }
+        });
+    }
+
     self.setQuestion = function(index){
         if(index !== undefined && typeof index == "number") self.questionNumber(index);
         let answered = self.answers[index]
@@ -49,7 +69,7 @@ export default function vmAccounting(settings){
     };
 
     self.checkAnswers = function(){
-        self.answers[self.questionNumber()] = self.currentQuestion();
+        if(self.answers[self.questionNumber()] == undefined) self.answers[self.questionNumber()] = self.currentQuestion();
         if(self.currentQuestion().checkAnswers() == 0){
             self.currentQuestion().answered = true;
             if(self.questions.length != self.answers.length || self.unfinishedAnswers() >= 0){
@@ -59,13 +79,15 @@ export default function vmAccounting(settings){
                     buttons: [{ text: "Next", callback: self.next}]
                 });
             }else{
-                new vmModal({
-                    title: "You Win!",
-                    message: self.answers.length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
-                    buttons: [
-                        { text: "Yes", callback: () => window.location.reload() }, 
-                        {text: "No", callback: function(){ location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; }
-                    }]
+                self.sendAnswers().then(function(){
+                    new vmModal({
+                        title: "You Win!",
+                        message: self.answers.length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
+                        buttons: [
+                            { text: "Yes", callback: () => window.location.reload() }, 
+                            {text: "No", callback: function(){ location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; }
+                        }]
+                    });
                 });
             }
         }
@@ -73,7 +95,7 @@ export default function vmAccounting(settings){
 
     self.next = function(){
         let next = self.answers.length > 0 ? self.unfinishedAnswers() : -1;
-        self.questionNumber(next >= 0 && next <= self.questions.length ? next : self.questionNumber()+1 );
+        self.questionNumber(next >= 0 && next <= self.questions.length ? next : self.questionNumber() < self.questions.length ? self.questionNumber()+1 : 0);
         self.setQuestion(self.questionNumber());
     }
 
@@ -84,8 +106,7 @@ export default function vmAccounting(settings){
         self.getQuestions().then(function(){
             self.setQuestion();
             ko.applyBindings(self);
-            loader.end()
-        })
+        });
     }();
     return self;
 };

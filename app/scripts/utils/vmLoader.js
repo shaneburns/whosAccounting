@@ -33,7 +33,7 @@ export default function vmLoader(settings){
                 }
             }, 
             error: function(error){
-                console.log(error);
+                console.error(error);
             }
         });
     };

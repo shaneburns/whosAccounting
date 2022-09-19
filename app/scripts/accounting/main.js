@@ -2,7 +2,7 @@ import ko from 'knockout'
 import vmAccounting from './vmAccounting.js'
 import vmLoader from './../utils/vmLoader.js'
 
-window.loader = new vmLoader({id: "loaderWrapper"})
+window.loader = new vmLoader({id: "loaderWrapper"});
 
 const main = function(){
     ko.bindingHandlers.stopBinding = {
@@ -21,5 +21,5 @@ if (
 ) {
     main();
 } else {
-  document.addEventListener("DOMContentLoaded", main);
+    document.addEventListener("DOMContentLoaded", main);
 } 

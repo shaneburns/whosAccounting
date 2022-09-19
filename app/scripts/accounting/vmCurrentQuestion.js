@@ -12,7 +12,7 @@ export default function vmCurrentQuestion(settings){
     self.correct_answers = null;
     self.cashEntries = [];
     self.accrualEntries = [];
-    self.answered = false
+    self.answered = false;
 
     /**
      * methods
@@ -54,10 +54,10 @@ export default function vmCurrentQuestion(settings){
         for(let i = 0; i <= self.correct_answers.length - 1; i++){
             for(let j = 0; j <= self.correct_answers[i].entries.length - 1; j++){
                 if(self.correct_answers[i].type == 'cash'){
-                    self.cashEntries.push(new vmAnswer())
+                    self.cashEntries.push(new vmAnswer());
                 }
                 if(self.correct_answers[i].type == 'accrual'){
-                    self.accrualEntries.push(new vmAnswer())
+                    self.accrualEntries.push(new vmAnswer());
                 }
             }
         }
