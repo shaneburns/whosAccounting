@@ -1,0 +1,25 @@
+// My Mixins '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+=transition($transition...)
+    -moz-transition:    $transition
+    -o-transition:      $transition
+    -webkit-transition: $transition
+    transition:         $transition
+=background-img($img: null, $size: 100% auto, $position: 50%, $repeat: no-repeat)
+    @if $img != null
+        background: url(#{$img})
+    background-size: $size
+    background-position: $position
+    background-repeat: $repeat
+=transform($property...)
+    -webkit-transform: $property  /* Chrome, Opera 15+, Safari 3.1+ */
+    -ms-transform: $property  /* IE 9 */
+    transform: $property  /* Firefox 16+, IE 10+, Opera */
+=keyframes( $animationName )
+    @-webkit-keyframes #{$animationName}
+        @content
+    @-moz-keyframes #{$animationName}
+        @content
+    @-o-keyframes #{$animationName}
+        @content
+    @keyframes #{$animationName}
+        @content

@@ -1,0 +1,168 @@
+body 
+    background: antiquewhite url("/images/noise.png")  2.11538rem 0
+    select, option, input, textarea   
+        font-weight: 300
+        margin: .78rem 0 
+        padding: .7rem
+        background: #ffffff6f
+        color: #3d3d3d
+        border: 1px solid #0f0e0e
+        box-shadow: 0 0 0 0 #2d2d2d
+        border-radius: .1rem
+        +transition(.193s linear, width 0s linear)
+        &:hover, &:focus
+            background: #ffffffef
+            box-shadow: 0 0  .5rem -.16rem #2d2d2d
+        
+        &.dark
+            color: $lightestGreen
+            border: 1px solid $lightestGreen
+            &:hover, &:focus
+                color: #2d2d2d
+                box-shadow: 0 0 .4943rem -.11115rem $lightestGreen
+            option
+                color: #3d3d3d
+
+    header
+        position: fixed
+        top: 0
+        left: 0
+        padding: 0rem 1rem
+        width: 100%
+        background:  linear-gradient(to top, transparent, rgba(250, 235, 215, .5) 20%, antiquewhite 60%)
+        width: 100%
+        min-height: 3.6rem
+        z-index: 16
+        +transition(all .23641s linear)
+        &.overlay
+            background: transparentize($lightestGreen, 0.234651)
+            h1
+                padding: .6rem 0 2rem
+                font-size: 1.369rem
+                font-weight: 800
+        h1
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            padding: .7rem 0 3rem
+            font-size: 1.8696969rem
+            font-weight: 800
+            text-align: center
+            +transition(all .23641s linear)
+    main
+        margin: 10rem auto 0
+        max-width: 1082px
+        h2
+            padding: 2rem 0
+            text-align: center
+            font-style: italic
+            font-weight: bold
+        #question
+            text-align: center
+            font-size: 1.35rem
+        #answers
+            h3
+                padding: 2rem 1rem
+                font-size: 1.3rem
+                font-weight: 500
+            ul:not(ul.errors)
+                max-width: 1080px
+                padding: inherit 1rem
+                margin: 0 auto
+                display: flex
+                flex-direction: column
+                li:not(ul.errors li)
+                    margin-bottom: 1rem
+                    border-radius: .1rem
+                    padding: 1rem 0 1rem 1rem
+                    display: flex
+                    flex-direction: row
+                    flex-flow: row
+                    flex-wrap: wrap
+                    justify-content: space-evenly
+                    position: relative
+                    background: #cf863221
+                    &:not(:last-of-type)::after
+                        content: ''
+                        position: absolute
+                        bottom: -.5rem
+                        left: 5%
+                        width: 90%
+                        height: 1px
+                        background: #999
+                    span.entryNumberWrapper
+                        opacity: 1
+                        position: absolute
+                        top: 0
+                        left: 0
+                        right: 0
+                        bottom: 0
+                        z-index: -1
+                        overflow: hidden
+                        span.entryNumber
+                            position: absolute
+                            bottom: -1rem
+                            right: 0
+                            font-size: 10rem
+                            font-weight: 900
+                            color: #fff
+                    span.checkmarkWrapper
+                        opacity: 1
+                        position: absolute
+                        top: 0
+                        left: 0
+                        right: 0
+                        bottom: 0
+                        background: rgba(255, 255, 255, .6)
+                        z-index: 1
+                        font-size: 5rem
+                        text-align: right
+                        overflow: hidden
+                        +transition(opacity .23641s ease)
+                        &.hidden
+                            opacity: 0
+                            width: 0
+                            span.checkmark
+                                right: 100%
+                        span.checkmark
+                            position: absolute
+                            top: 0
+                            right: .3rem
+                            font-size: 5rem
+                            +transition(right 1.386s ease)
+                    div.formElWrapper
+                        flex-grow: 1
+                        width: 43.5%
+                        margin-right: 1rem
+                        position: relative
+                        label
+                            width: 100px
+                            border-bottom: 1px solid #000
+                            height: 1rem
+                            font-size: 1rem
+                            font-weight: 400
+                        input, select
+                            width: 100%
+                    &.error
+                        outline: 1px solid #6b1515
+        #indicators
+            ul
+                display: flex
+                justify-content: center
+                li
+                    color: #999
+                    width: 10px
+                    height: 10px
+                    margin: 0 10px
+                    float: left
+                    +transform(scale(1.0))
+                    +transition(transform 1s linear)
+                    &.curr
+                        color: #000
+                        +transform(scale(1.08))
+
+        #submit
+            display: block
+            margin: 2rem auto
+            width: 90%

@@ -1,0 +1,17 @@
+RewriteEngine On
+RewriteBase /
+
+# Handles /
+DirectoryIndex /index.php
+
+# Handles /scripts/main.php and such
+ErrorDocument 403 /
+ErrorDocument 404 /
+
+
+# All those web app paths that don't match the filesystem, like /main
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ /index.php [L,QSA]
+
+# And, of course, / handles itself

@@ -1,0 +1,8 @@
+{
+    "require": {
+        "mcshane/chem-mvc" : "dev-master"
+    },
+    "autoload": {
+        "psr-4": { "app\\" : "" }
+    }
+}

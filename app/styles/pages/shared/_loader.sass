@@ -1,0 +1,34 @@
+#loaderWrapper
+    position: fixed
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    z-index: 25555
+    background-color: rgba(0, 0, 0, .3)
+    &.hidden
+        display: none
+    #loader
+        display: block
+        position: relative
+        left: 50%
+        top: 50%
+        width: 100px
+        height: 100px
+        margin: -50px 0 0 -50px
+        outline: 1px solid #fff
+        &::before, &::after
+            content: ''
+            position: absolute
+            width: 50%
+            height: 0
+            background: #f0f0f0
+        &::before
+            top: 0
+            left: 0
+            animation: loaderAnimFromTop 1s linear infinite alternate
+        &::after
+            bottom: 0
+            right: 0
+            animation: loaderAnimFromBottom 1s linear infinite alternate
+    
