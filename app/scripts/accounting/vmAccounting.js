@@ -86,7 +86,6 @@ export default function vmAccounting(settings){
     
     self.nextUnfinishedIndex = function(wanted){
         if(typeof wanted == 'number'){
-            console.log('here');
             if(self.userInput()[wanted] == undefined) self.addUserInput(wanted);
             return wanted
         }
@@ -164,6 +163,7 @@ export default function vmAccounting(settings){
                 });
             }
         });
+        window.haveFun = self.haveFun;
     }();
 
     return self;
