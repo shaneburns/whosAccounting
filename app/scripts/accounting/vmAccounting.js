@@ -1,7 +1,10 @@
 import $, { ajax } from 'jquery'
 import ko from 'knockout'
 import 'knockout-mapping'
-import vmCurrentQuestion from './vmCurrentQuestion.js'
+import Cookies from 'js-cookie'
+import JSConfetti from 'js-confetti'
+
+import vmQuestion from './vmQuestion.js'
 import vmModal from '../utils/vmModal.js'
 
 export default function vmAccounting(settings){
@@ -11,29 +14,45 @@ export default function vmAccounting(settings){
      */////////////////////////////////////////////////////////////
     self.questionSource = settings.url;
     self.questions = [];
-    self.answers = [];
+    self.cookieName = settings.cookieName ?? 'ACCOUNT_ME_IN';
+    self.cookieExpireIn = settings.expireIn ?? 7;
+    self.fun = new JSConfetti();
+    self.haveFun = function(forever = 0){
+        self.fun.addConfetti({emojis: ['🤘', '💰', '👍','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ]}).then(()=>forever && self.haveFun(forever))
+        return true;
+    }
     /**
      * observables
      */////////////////////////////////////////////////////////////
-    self.questionNumber = ko.observable(0);
-    self.currentQuestion = ko.observable(new vmCurrentQuestion());
-    self.errors = ko.observableArray([]);
+    self.userInput = ko.observableArray();
 
 
-    self.unfinishedAnswers = function(){
-        let index = self.answers.findIndex(Object.is.bind(null, undefined));
-        index = index == -1 ? self.answers.findIndex((el, i)=> el != undefined && el.answered == false) : index
-        return index;
-    }
-    self.answersJSON = ko.pureComputed(function() { 
-        return JSON.stringify(self.answers.map(function(answer){
-            return {title: answer.title, description: answer.description, cashEntries: ko.mapping.toJS(answer.cashEntries), accrualEntries: ko.mapping.toJS(answer.accrualEntries)} 
-        }))
+    /**
+    * computed
+    */////////////////////////////////////////////////////////////
+    self.currentIndex = ko.computed(function(){
+        return self.userInput().findIndex(e=>e && e.current()) ?? 0;
     })
+    self.currentQuestion = ko.computed(function(){
+        return  self.userInput()[self.currentIndex()] ?? new vmQuestion();
+    })
+    self.answersJSON = ko.computed(function() { 
+        return JSON.stringify(self.userInput().map(answer => answer.toFormatted()));
+    });
+    
+    
     /**
      * methods
      */////////////////////////////////////////////////////////////
-    self.getQuestions = function(){
+
+    // Cookie CRUD
+    self.isCookie = (cookieName) => Cookies.get(cookieName) && Cookies.get(cookieName) !== 'undefined';
+    self.updateCookie = (cookieName, val, expireIn) => Cookies.set(cookieName, val, {expires: expireIn, path: '' });
+    self.getCookie = () => JSON.parse( self.isCookie(self.cookieName) ? Cookies.get(self.cookieName) : '[]' ).map(userInput => new vmQuestion(userInput));
+    self.removeCookie = () => Cookies.remove(self.cookieName, {expires: -1, path: '' });
+
+    // Async calls
+    self.getQuestions = function(){ // aquire json object with questions
         loader.start('getQuestions');
         return $.ajax({
             type: "get",
@@ -46,7 +65,7 @@ export default function vmAccounting(settings){
         });
     };
 
-    self.sendAnswers = function(){
+    self.sendAnswers = function(){// send json object of question-userInput data to server 
         loader.start('sendAnswers');
         return $.ajax({
             type: "post",
@@ -61,31 +80,58 @@ export default function vmAccounting(settings){
         });
     }
 
-    self.setQuestion = function(index){
-        if(index !== undefined && typeof index == "number") self.questionNumber(index);
-        let answered = self.answers[index]
-        self.currentQuestion( answered != undefined ? answered : new vmCurrentQuestion(self.questions[self.questionNumber()]));
-        window.scrollTo(0, 0);
-    };
+    // User Interactions
+    // Add designated question to userInput array
+    self.addUserInput = (index) => self.userInput.splice(index, 1, new vmQuestion(self.questions[index]));
+    
+    self.nextUnfinishedIndex = function(wanted){
+        if(typeof wanted == 'number'){
+            console.log('here');
+            if(self.userInput()[wanted] == undefined) self.addUserInput(wanted);
+            return wanted
+        }
+        let index = self.userInput().findIndex(Object.is.bind(null, undefined));// find index of first undefined element
+        if(index == -1) index = self.userInput().findIndex((e)=> e.answered == false); // no undefined - find unfinished
 
+        // no unfinished and user isnt finished with all questions
+        if(index == -1 && self.userInput().length < self.questions.length){
+            // add the next question using array length ass index
+            index = self.userInput().length;
+            self.addUserInput(index);
+        }
+        return index;// tell em where it is
+    }
+
+    self.next = function(index){
+        self.currentQuestion().current(false);// unset current
+        let i = self.nextUnfinishedIndex(index);
+        self.userInput()[i].current(true);// set current
+        window.scrollTo(0, 0);// show the world
+    };
+    
     self.checkAnswers = function(){
-        if(self.answers[self.questionNumber()] == undefined) self.answers[self.questionNumber()] = self.currentQuestion();
-        if(self.currentQuestion().checkAnswers() == 0){
-            self.currentQuestion().answered = true;
-            if(self.questions.length != self.answers.length || self.unfinishedAnswers() >= 0){
+        if(self.currentQuestion().isCorrect()){// no errors found in answers and all matched
+            self.currentQuestion().answered = true;// mark it forever answered
+            
+            if(self.questions.length != self.userInput().length || self.nextUnfinishedIndex() >= 0){// if short on answers or there are any unfinished
+                // Show they got it right
                 new vmModal({
                     title: "Correct!",
                     message: "Click next to continue.",
-                    buttons: [{ text: "Next", callback: self.next}]
+                    onInit: self.haveFun,
+                    buttons: [{ text: "Next", callback: self.next}]// keep going
                 });
-            }else{
+            }else{// Trial completed
                 self.sendAnswers().then(function(){
+                    self.removeCookie()// get rid of the evidence
+                    // Congratulations all around //
                     new vmModal({
                         title: "You Win!",
-                        message: self.answers.length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
+                        message: self.userInput().length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
+                        onInit: () => self.haveFun(1),
                         buttons: [
-                            { text: "Yes", callback: () => window.location.reload() }, 
-                            {text: "No", callback: function(){ location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; }
+                            { text: "Yes", callback: () => window.location.reload() }, // Go insane
+                            { text: "No", callback: () => { location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; } // Get inspired and back to work
                         }]
                     });
                 });
@@ -93,20 +139,32 @@ export default function vmAccounting(settings){
         }
     };
 
-    self.next = function(){
-        let next = self.answers.length > 0 ? self.unfinishedAnswers() : -1;
-        self.questionNumber(next >= 0 && next <= self.questions.length ? next : self.questionNumber() < self.questions.length ? self.questionNumber()+1 : 0);
-        self.setQuestion(self.questionNumber());
-    }
 
     /**\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
      * init                                              |||||||
      */////////////////////////////////////////////////////////
+    self.start = function(){
+        self.userInput(self.getCookie()); // Check for cookie containing unfinished answer array
+            
+        self.answersJSON.subscribe( value => self.updateCookie(self.cookieName, value, self.cookieExpireIn)); // update cookie when userInput changes
+        
+        self.userInput().findIndex(e=>e.current && e.current()) < 0 && self.next() // if no cookie data kick it off
+    }
+    
     self.init = function(){
-        self.getQuestions().then(function(){
-            self.setQuestion();
-            ko.applyBindings(self);
+        self.getQuestions().then(function(){// start by getting the questions
+            if(self.isCookie(self.cookieName)) self.start()
+            else {
+                return new vmModal({
+                    title: "Ready to play?",
+                    message: 'Fill out the fields according to the questions and see if you can get them all. Try it out!',
+                    buttons: [
+                        { text: "Start", callback: function(){ return self.haveFun() && self.start(); } }// Start
+                    ]
+                });
+            }
         });
     }();
+
     return self;
 };

@@ -1,3 +1,4 @@
+.vscode
 app/vendor
 app/.env
 app/scripts/node_modules

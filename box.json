@@ -1,0 +1,6 @@
+{
+    "files": ["app/config/init.php"],
+    "main": "app/config/init.php",
+    "output": "bin/accounting.phar",
+    "stub": true
+}

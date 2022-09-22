@@ -8,6 +8,7 @@ export default function vmModal(settings){
     self.message = settings.message ?? "This is a message in a modal.";
     self.buttons = settings.buttons ?? [{text: 'Click Me'}];
     self.defaultResolve = settings.defaultAction ?? self.buttons[0];
+    self.onInit = settings.onInit ?? false
     /**
      * Functions
      *////////////////////////////////////////////////////////////////
@@ -15,11 +16,11 @@ export default function vmModal(settings){
         if(button.defaultResolve && button.defaultResolve.callback) button = self.defaultResolve;
         self.destroy();
         return button.callback && typeof button.callback === "function" ? button.callback() : 'modal destroyed';
-    }
+    };
 
     self.destroy = function(){
         document.getElementById(self.id).remove();
-    }
+    };
 
     self.getModalMarkUp = function(){
         loader.start('modalGet');
@@ -41,11 +42,13 @@ export default function vmModal(settings){
                 console.error('Modal Error: ', error);
             }
         });
-    }
+    };
 
     self.init = function(){
         return self.getModalMarkUp().then(function(){
+            if(self.onInit) self.onInit()
             ko.applyBindings(self, document.getElementById(self.id));
+            document.querySelector("#"+self.id+" input[type=submit].defaultBtn").focus();
         });
     }();
 }

@@ -13,6 +13,7 @@ const main = function(){
     ko.virtualElements.allowedBindings.stopBinding = true;
 
     const game = new vmAccounting({url: 'https://reclique.github.io/web-dev-testing/1_accounting_game/questions.json'});
+    ko.applyBindings(game);
 }
 
 if (

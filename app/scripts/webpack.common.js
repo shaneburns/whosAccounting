@@ -3,15 +3,14 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'development',
   entry: {
     'accountBundle': path.join(__dirname, 'accounting/main.js')
   },
-  watch: true,
   output: {
     path: path.join(__dirname, '../../public/scripts/dist'),
     publicPath: '/scripts/dist/',
-    filename: '[name].js'
+    filename: '[name].js',
+    clean: true,
   },
   module: {
     rules: [{
@@ -29,5 +28,4 @@ module.exports = {
   resolve: {
     extensions: ['.json', '.js', '.jsx'],
   },
-  devtool: 'source-map'
 };

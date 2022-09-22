@@ -7,10 +7,10 @@
 
 <body>
     <header>
-        <h1>Who's Accounting?</h1>
+        <h1>$$$ ¿Who's Accounting? $$$</h1>
     </header>
 
-    <main>
+    <main class="hidden" data-bind="css: {hidden: !currentQuestion().title}">
         <form>
             <div id="currentQuestion" data-bind="with: currentQuestion">
                 <h2 data-bind="text: title + ' of ' + $root.questions.length""></span></h2>
@@ -18,7 +18,7 @@
                 
                 <div id="indicators">
                     <ul data-bind="foreach: $root.questions">
-                        <li data-bind="css: {curr: $index() == $root.questionNumber()}, attr: {title: title}, text: $index() == $root.questionNumber() ? '&#10687;' : '&#10686;', click: () => $root.setQuestion($index())"></li>
+                        <li data-bind="css: {curr: $index() == $root.currentIndex()}, attr: {title: title}, text: $root.userInput()[$index()] && $root.userInput()[$index()].answered ? '&#x2705;' : $index() == $root.currentIndex() ? '&#10687;' :  '&#10686;', click: () => $root.next($index())"></li>
                     </ul>
                 </div>
 
@@ -33,19 +33,19 @@
 
                             <div class="formElWrapper">
                                 <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="value: when, disable: match() !== undefined" required>
+                                <input type="date" data-bind="textInput: when, disable: match() !== undefined, valueUpdate: 'afterkeydown'" placeholder="00/00/0000" required>
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined" required></select>
+                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined, valueUpdate: 'input'" placeholder="Choose"  required></select>
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined">
+                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined">
+                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
                             </div>
                             <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
                                 <li data-bind="text: $data"></li>
@@ -63,19 +63,19 @@
 
                              <div class="formElWrapper">
                                 <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="value: when, disable: match() !== undefined" required>
+                                <input type="date" data-bind="value: when, disable: match() !== undefined" placeholder="mm/dd/yyyy" required>
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined" required></select>
+                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined" placeholder="Choose" required></select>
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined">
+                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
                             </div>
                             <div class="formElWrapper">
                                 <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined">
+                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
                             </div>
                             <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
                                 <li data-bind="text: $data"></li>
