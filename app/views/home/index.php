@@ -25,62 +25,12 @@
                 <div id="answers">
                     <h3>Cash Entries</h3>
                     <ul id="cash" class="group" data-bind="foreach: cashEntries">
-                        <li class="answer" data-bind="css: {'error': errors().length > 0}">
-
-                            <span class="entryNumberWrapper"><span class="entryNumber" data-bind="text: $index() + 1"></span></span>
-                            
-                            <span class="checkmarkWrapper hidden" data-bind="css: {hidden: match() === undefined }"><span class="checkmark">✔️</span></span>
-
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="textInput: when, disable: match() !== undefined, valueUpdate: 'afterkeydown'" placeholder="00/00/0000" required>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined, valueUpdate: 'input'" placeholder="Choose"  required></select>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
-                                <li data-bind="text: $data"></li>
-                            </ul>
-                        </li>
+                        <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                     </ul>
 
                     <h3>Accrual Entries</h3>
                     <ul id="accrual" class="group" data-bind="foreach: accrualEntries">
-                        <li class="answer" data-bind="css: {'error': errors().length > 0}">
-
-                            <span class="entryNumberWrapper"><span class="entryNumber" data-bind="text: $index() + 1"></span></span>
-
-                            <span class="checkmarkWrapper hidden" data-bind="css: {hidden: match() === undefined }"><span class="checkmark">👍</span></span>
-
-                             <div class="formElWrapper">
-                                <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="value: when, disable: match() !== undefined" placeholder="mm/dd/yyyy" required>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined" placeholder="Choose" required></select>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
-                                <li data-bind="text: $data"></li>
-                            </ul>
-                        </li>
+                        <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                     </ul>
                 </div>
             </div>
