@@ -17,8 +17,11 @@ export default function vmAccounting(settings){
     self.cookieName = settings.cookieName ?? 'ACCOUNT_ME_IN';
     self.cookieExpireIn = settings.expireIn ?? 7;
     self.fun = new JSConfetti();
-    self.haveFun = function(forever = 0){
-        self.fun.addConfetti({emojis: ['🤘', '💰', '👍','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ]}).then(()=>forever && self.haveFun(forever))
+    self.haveFun = function(fun = true, forever = 0){
+        self.fun.addConfetti({
+            emojis: fun ? ['🤘', '💰', '👍','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ] :
+                ['⭕','❌','❌','❌','❌','⭕','💩','💩','⛔','⛔','🙅‍♂️','🙅‍♀️','😒','😒','😒','😒']
+        }).then(()=>forever && self.haveFun(forever))
         return true;
     }
     /**
@@ -127,7 +130,7 @@ export default function vmAccounting(settings){
                     new vmModal({
                         title: "You Win!",
                         message: self.userInput().length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
-                        onInit: () => self.haveFun(1),
+                        onInit: () => self.haveFun(true, 1),
                         buttons: [
                             { text: "Yes", callback: () => window.location.reload() }, // Go insane
                             { text: "No", callback: () => { location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; } // Get inspired and back to work
@@ -135,7 +138,9 @@ export default function vmAccounting(settings){
                     });
                 });
             }
+            return true;
         }
+        return false;
     };
 
 

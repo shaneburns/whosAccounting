@@ -7,13 +7,13 @@
 
 <body>
     <header>
-        <h1>$$$ ¿Who's Accounting? $$$</h1>
+        <h1 class="title">$$$ ¿Who's Accounting? $$$</h1>
     </header>
 
     <main class="hidden" data-bind="css: {hidden: !currentQuestion().title}">
         <form>
             <div id="currentQuestion" data-bind="with: currentQuestion">
-                <h2 data-bind="text: title + ' of ' + $root.questions.length""></span></h2>
+                <h2 class="title" data-bind="text: title + ' of ' + $root.questions.length""></span></h2>
                 <div id="question" data-bind="text: description + '?'"></div>
                 
                 <div id="indicators">
@@ -22,70 +22,20 @@
                     </ul>
                 </div>
 
-                <div id="answers">
-                    <h3>Cash Entries</h3>
-                    <ul id="cash" class="group" data-bind="foreach: cashEntries">
-                        <li class="answer" data-bind="css: {'error': errors().length > 0}">
-
-                            <span class="entryNumberWrapper"><span class="entryNumber" data-bind="text: $index() + 1"></span></span>
-                            
-                            <span class="checkmarkWrapper hidden" data-bind="css: {hidden: match() === undefined }"><span class="checkmark">✔️</span></span>
-
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="textInput: when, disable: match() !== undefined, valueUpdate: 'afterkeydown'" placeholder="00/00/0000" required>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined, valueUpdate: 'input'" placeholder="Choose"  required></select>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
-                                <li data-bind="text: $data"></li>
-                            </ul>
-                        </li>
+                <div id="answers" class="section">
+                    <h3 class="title">Cash Entries</h3>
+                    <ul id="cash" class="group container" data-bind="foreach: cashEntries">
+                        <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                     </ul>
 
-                    <h3>Accrual Entries</h3>
-                    <ul id="accrual" class="group" data-bind="foreach: accrualEntries">
-                        <li class="answer" data-bind="css: {'error': errors().length > 0}">
-
-                            <span class="entryNumberWrapper"><span class="entryNumber" data-bind="text: $index() + 1"></span></span>
-
-                            <span class="checkmarkWrapper hidden" data-bind="css: {hidden: match() === undefined }"><span class="checkmark">👍</span></span>
-
-                             <div class="formElWrapper">
-                                <label class="floatingLabel">When</label>
-                                <input type="date" data-bind="value: when, disable: match() !== undefined" placeholder="mm/dd/yyyy" required>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Type</label>
-                                <select class="type" data-bind="options: typeList, value: selectedType, optionsCaption: 'Choose', disable: match() !== undefined" placeholder="Choose" required></select>
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Dr</label>
-                                <input type="number" data-bind="textInput: dr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <div class="formElWrapper">
-                                <label class="floatingLabel">Cr</label>
-                                <input type="number" data-bind="textInput: cr, disable: match() !== undefined" placeholder="Ammount">
-                            </div>
-                            <ul class="errors hidden" data-bind="foreach: errors(), css: {hidden: errors().length == 0}">
-                                <li data-bind="text: $data"></li>
-                            </ul>
-                        </li>
+                    <h3 class="title">Accrual Entries</h3>
+                    <ul id="accrual" class="group container" data-bind="foreach: accrualEntries">
+                        <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                     </ul>
                 </div>
             </div>
 
-            <input id="submit" type="submit" data-bind="click: currentQuestion().answered ? next : checkAnswers, value: currentQuestion().answered ? 'Next' : 'Submit'"/>
+            <input id="submit" type="submit" class="button" data-bind="click: currentQuestion().answered ? next : checkAnswers, value: currentQuestion().answered ? 'Next' : 'Submit'"/>
         </form>
     </main>
 
