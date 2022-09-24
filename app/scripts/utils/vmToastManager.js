@@ -10,10 +10,18 @@ export function vmToast(settings){
     self.dismissable = settings.dismissable ?? false;
     self.message = settings.message ?? "This is a message in a toast.";
     self.buttons = settings.buttons ?? [];
-
+    self.timeout = null;
     /**
      * Functions
      *////////////////////////////////////////////////////////////////
+    self.setTimeout = function(){
+        self.timeout = self.duration < Infinity ? setTimeout(self.destroy, self.duration) : null;
+    }
+    self.onHover = function(){
+        console.log('here');
+        self.timeout && clearTimeout(self.timeout);
+        self.timeout = null;
+    }
     self.resolve = function(button){
         self.destroy()
         return button.callback && typeof button.callback === "function" ? button.callback() : 'toast destroyed'
@@ -38,7 +46,7 @@ export default function vmToastManager(settings){
     self.addToast = function(toast){
         toast.parent = self
         self.toasts.unshift(toast)
-        if(toast.duration < Infinity) setTimeout(toast.destroy, toast.duration)
+        toast.setTimeout()
         return true
     }
     self.removeToast = function(toast){

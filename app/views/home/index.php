@@ -3,19 +3,19 @@
     $this->title = "Reclique/DaxCo - Technical Interview ";
     $this->description = "Reclique Technical Interview";
     array_push($this->styles, 
-        "/css/dist/accounting.min.css",
-        "/css/dist/myBulma.min.css"
+        "/css/dist/myBulma.min.css",
+        "/css/dist/accounting.min.css"
     );
 
     include(APP_ROOT.ds."views".ds."shared".ds."head.php");
 ?>
 
 <body class="has-navbar-fixed-top is-clipped">
-    <header class="navbar is-fixed-top has-background-transparent-white">
-        <h1 class="title is-3"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+    <header class="navbar is-fixed-top" data-bind="css: {onTop: !currentQuestion().title}">
+        <h1 class="title is-3" data-bind="visible: started"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
     </header>
 
-    <main class="is-hidden my-6 py-6" data-bind="css: {'is-hidden': !currentQuestion().title}">
+    <main class="is-invisible my-6 py-6" data-bind="css: {'is-invisible': !currentQuestion().title}">
         <form class="container is-flex is-flex-direction-column mt-6" data-bind="submit: haveFun">
             <div id="currentQuestion" class="block" data-bind="with: currentQuestion">
                 <div class="section">
@@ -30,14 +30,14 @@
                 </div>
 
                 <div id="answers" class="section">
-                    <div class="block mb-6 pb-6">
-                        <h3 class="title block">Cash Entries</h3>
+                    <div class="block box mb-6 pb-6">
+                        <h3 class="title block is-underlined">Cash Entries</h3>
                         <ul id="cash" class="group container block" data-bind="foreach: cashEntries">
                             <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                         </ul>
                     </div>
-                    <div class="block">
-                        <h3 class="title block">Accrual Entries</h3>
+                    <div class="block box">
+                        <h3 class="title block is-underlined">Accrual Entries</h3>
                         <ul id="accrual" class="group container block" data-bind="foreach: accrualEntries">
                             <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
                         </ul>
@@ -52,7 +52,23 @@
             </div>
         </form>
     </main>
-
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+            <strong>Designed</strong> by <a href="https://shaneburns.com"  target="_blank">Shane Burns</a>
+            </p>
+            <p>
+                <em>
+                    <a href="https://github.com/shaneburns/whosAccounting" target="_blank"> View on
+                            <span class="image ml-1 is-16x16 is-inline-block">
+                                <img class="is-rounded" style="margin-top: 2px" src="https://github.githubassets.com/apple-touch-icon-144x144.png" />
+                            </span>
+                        GitHub
+                    </a>
+                </em>
+            </p>
+        </div>
+    </footer>
     <?php include(APP_ROOT.ds.'views'.ds.'utils'.ds.'loader.php'); ?>
 
     <script src="/scripts/dist/accountBundle.js"></script>

@@ -1,7 +1,7 @@
 <div id="toasts">
     <div id="toastWrapper">
         <ul class="section container is-pulled-right" data-bind="foreach: toasts">
-            <li class="container group box block">
+            <li class="container group box block animate__animated animate__bounce" data-bind="event: {mouseover : onHover, mouseout: setTimeout}" >
                 <!-- ko if: dismissable -->
                     <button class="delete is-pulled-right" data-bind="click: resolve"></button>
                 <!-- /ko -->

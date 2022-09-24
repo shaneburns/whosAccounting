@@ -31,6 +31,7 @@ export default function vmAccounting(settings){
     /**
      * observables
      */////////////////////////////////////////////////////////////
+    self.started = ko.observable(false);
     self.userInput = ko.observableArray();
 
 
@@ -156,8 +157,8 @@ export default function vmAccounting(settings){
                     onInit: () => self.haveFun(true, 1),
                     buttons: [
                         { text: "Yes", callback: () => window.location.reload() }, // Go insane
-                        { text: "No", callback: () => { location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; } // Get inspired and back to work
-                    }]
+                        { text: "No", callback: () => window.open("https://www.youtube.com/watch?v=KxGRhd_iWuE", '_blank') } // Get inspired and back to work
+                    ]
                 });
             });
         }
@@ -190,6 +191,7 @@ export default function vmAccounting(settings){
     self.init = function(){
         if(self.acceptanceCookie() == null || self.acceptanceCookie() == 'null') self.showCookieAcceptanceToast()
         self.getQuestions().then(function(){// start by getting the questions
+            self.started(true);
             if(self.isCookie(self.cookieName)) self.start()
             else {
                 return new vmModal({

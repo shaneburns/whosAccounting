@@ -14,31 +14,40 @@ body
         z-index: 2562563 !important
     //
 
-    header
+    header.navbar
         position: fixed
         top: 0
         left: 0
         padding: 0rem 1rem
         width: 100%
         min-height: 3.6rem
+        background: linear-gradient(to top, transparent, $seeThroughWhite, #fff)
         z-index: 16
         +transition(all .23641s linear)
+        &.navbar.onTop
+            background: none
+            z-index: 25000
+            h1
+                color: #fff
+                text-shadow: -2px 2px 3px $seeThroughWhite, -15px 5px 5px #302b2b79
         h1
             position: relative
             width: 100%
             text-align: center
             padding: 4rem 0 3rem
-            color: #153b13
+            color: #000
             text-shadow: -2px 2px 3px #fff, -15px 5px 5px #302b2b79
             +transition(all .23641s linear)
-            animation: floatingLogo 10s ease infinite reverse
+            animation: tada 10s ease 1s infinite both, bounceInDown 1s
             span
                 position: absolute
                 display: inline-block
+                margin-left: -2rem
                 z-index: -1
-                animation: floatingLogo 10s ease infinite both
+                animation:  floatingLogo 10s ease 2s infinite both, backInLeft 1s .75s backwards
                 &:last-of-type
-                    margin-left: -4rem
+                    animation:  floatingLogo 10s ease 2s infinite both, backInRight 1s .75s backwards
+                    margin-left: -1rem
     main
         #answers
             ul:not(ul.errors)

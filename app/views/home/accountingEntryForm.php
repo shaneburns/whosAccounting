@@ -1,4 +1,4 @@
-<li class="answer box block is-relative" data-bind="css: {'has-background-danger-light error': errors().length > 0, 'has-background-success': match() !== undefined}">
+<li class="answer box block is-relative animate__animated" data-bind="css: {'has-background-danger-light error animate__shakeX': errors().length > 0, 'has-background-success animate__tada': match() !== undefined}">
     <div class="columns mb-0">
         <span class="is-overlay"><span class="entryNumber is-size-too-big is-pulled-right has-text-grey-light" data-bind="text: $index() + 1"></span></span>
 
