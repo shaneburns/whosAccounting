@@ -1,0 +1,79 @@
+body 
+    background: url("/images/noise.png")  2.11538rem 0
+    &:before
+        content: '$'
+        position: fixed
+        top: -30rem
+        left: 2rem
+        font-size: 200ex
+        color: #f0f0f0
+        font-weight: 100
+        z-index: -100000
+        animation: logoAnim 60s ease infinite reverse
+    canvas
+        z-index: 2562563 !important
+    //
+
+    header
+        position: fixed
+        top: 0
+        left: 0
+        padding: 0rem 1rem
+        width: 100%
+        min-height: 3.6rem
+        z-index: 16
+        +transition(all .23641s linear)
+        h1
+            position: relative
+            width: 100%
+            text-align: center
+            padding: 4rem 0 3rem
+            color: #153b13
+            text-shadow: -2px 2px 3px #fff, -15px 5px 5px #302b2b79
+            +transition(all .23641s linear)
+            animation: floatingLogo 10s ease infinite reverse
+            span
+                position: absolute
+                display: inline-block
+                z-index: -1
+                animation: floatingLogo 10s ease infinite both
+                &:last-of-type
+                    margin-left: -4rem
+    main
+        #answers
+            ul:not(ul.errors)
+                li:not(ul.errors li)
+                    span.entryNumberWrapper
+                        span.entryNumber
+                            position: absolute
+                            top: -.3rem
+                            left: -.3rem
+                            font-size: 10rem
+                            font-weight: 900
+                    span.checkmarkWrapper
+                        z-index: 5
+                        &.hidden
+                            opacity: 0
+                            width: 0
+                            span.checkmark
+                                +transform(scale(0) rotate(359deg))
+                        span.checkmark
+                            position: absolute
+                            top: -3.3rem
+                            left: -3.3rem
+                            font-size: 5rem
+                            +transform(scale(1) rotate(-13deg))
+                            +transition(transform 1.386s cubic-bezier(0.280, 0.840, 0.420, 1))
+                    &.error
+                        outline: 1px solid #6b1515
+        #submit
+            background: #f0f0f0
+            border: 1px solid #48C78E
+            color: #48C78E
+            +transform(scale(1))
+            +transition(color .1s linear, background .1s linear, border .15s linear, transform .25s cubic-bezier(.54,-0.69,.42,1.65))
+            &:hover,&:active,&:focus
+                +transform(scale(1.06352))
+                background: #48C78E
+                border: 0px solid transparent
+                color: #f0f0f0

@@ -1,9 +1,11 @@
 import ko from 'knockout';
 
-export default function vmAnswer(settings = {}){
+export default function vmAnswer(settings = {}, parent){
     const self = this;
 
+    self.parent = parent ?? null;
     // Should be made into a db entry and retrieved asynchronously
+    self.type = settings.type ?? null;
     self.typeList = ['revenue','deferred','cash','receivable','contra','system-credit'];
 
     self.when = ko.observable(settings.when ?? undefined);
@@ -19,7 +21,7 @@ export default function vmAnswer(settings = {}){
 
     self.errors = ko.observableArray(settings.errors ?? []);
 
-    self.whenFormatted = ko.pureComputed(function(){
+    self.whenFormatted = ko.computed(function(){
         if(!self.when()) return;
         return new Date(!!self.when().match(self.dateFormats.ios) ? self.when() : self.when().replaceAll('-','/')).toLocaleDateString('en-US', {month: 'numeric', day: '2-digit'});
     });
@@ -31,7 +33,7 @@ export default function vmAnswer(settings = {}){
             self.selectedType() !== undefined && 
             ((self.dr() !== undefined && self.dr() !== "" && (self.cr() === undefined || self.cr() === "")) || 
             (self.cr() !== undefined && self.cr() !== "" && (self.dr() === undefined || self.dr() === "")))){
-                if(!self.whenFormatted().match(self.dateFormats.monthDay)) self.errors.push('Invalid date', self.whenFormatted().match(self.dateFormats.monthDay))
+                if(!self.whenFormatted() || !self.whenFormatted().match(self.dateFormats.monthDay)) self.errors.push('Invalid date', self.whenFormatted())
                 if(!self.typeList.find(el => el === self.selectedType())) self.errors.push('Inalid type chosen');
                 if((self.dr() && !Number.isInteger(parseInt(self.dr()))) || (self.cr() && !Number.isInteger(parseInt(self.cr())))) self.errors.push('Ammount entered is invalid')
         }else{self.errors.push('Fill all apropriate fields.');}
@@ -46,7 +48,13 @@ export default function vmAnswer(settings = {}){
             match: self.match(), 
             dr: self.dr(), 
             cr: self.cr(),
-            errors: self.errors()
+            errors: self.errors(),
+            type: self.type
         };
     }
+    self.findMatch = () => self.parent && self.parent.findMatch(self)
+    self.when.subscribe(self.findMatch)
+    self.selectedType.subscribe(self.findMatch)
+    self.dr.subscribe(self.findMatch)
+    self.cr.subscribe(self.findMatch)
 };

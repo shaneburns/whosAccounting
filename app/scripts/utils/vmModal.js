@@ -48,7 +48,7 @@ export default function vmModal(settings){
         return self.getModalMarkUp().then(function(){
             if(self.onInit) self.onInit()
             ko.applyBindings(self, document.getElementById(self.id));
-            document.querySelector("#"+self.id+" input[type=submit].defaultBtn").focus();
+            document.querySelector("#"+self.id+" button.is-success").focus();
         });
     }();
 }

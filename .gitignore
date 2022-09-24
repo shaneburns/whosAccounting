@@ -1,6 +1,7 @@
 .vscode
-app/vendor
 app/.env
 app/scripts/node_modules
+app/styles/node_modules
+app/vendor
 public/scripts/dist
 public/css/dist
