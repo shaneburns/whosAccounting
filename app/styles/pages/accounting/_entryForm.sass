@@ -38,15 +38,15 @@ body
             color: #000
             text-shadow: -2px 2px 3px #fff, -15px 5px 5px #302b2b79
             +transition(all .23641s linear)
-            animation: tada 10s ease 1s infinite both, bounceInDown 1s
+            animation: tada 5s ease 1s infinite, bounceInDown 1s 1
             span
                 position: absolute
                 display: inline-block
                 margin-left: -2rem
                 z-index: -1
-                animation:  floatingLogo 10s ease 2s infinite both, backInLeft 1s .75s backwards
+                animation:  floatingLogo 10s ease 2s infinite both, bounceInLeft 1s .75s backwards
                 &:last-of-type
-                    animation:  floatingLogo 10s ease 2s infinite both, backInRight 1s .75s backwards
+                    animation:  floatingLogo 10s ease 2s infinite reverse both, bounceInRight 1s .25s backwards
                     margin-left: -1rem
     main
         #answers

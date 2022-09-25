@@ -1,6 +1,6 @@
 <div id="modal<?php echo \ChemMVC\utils::GUID(); ?>" class="modal is-active">
     <div class="modal-background" data-bind="click: resolve"></div>
-    <div class="modal-card">
+    <div class="modal-card animate__animated animate__bounceIn">
         <header class="modal-card-head">
             <p class="modal-card-title" data-bind="html: title"></p>
             <button class="delete" aria-label="close" data-bind="click: destroy"></button>
