@@ -7,7 +7,6 @@
         </header>
         <section class="modal-card-body">
             <div class="content is-medium">
-                <p class="is-size-1 has-text-centered">🤔</p>
                 <p data-bind="text: message"></p>
             </div>
         </section>

@@ -21,17 +21,19 @@ export default function vmAccounting(settings){
     self.acceptanceCookieExpireIn = settings.acceptanceExpireIn ?? 31;
     self.fun = new JSConfetti();
     self.haveFun = function(fun = true, forever = 0){
+        console.log(fun, forever);
         self.fun.addConfetti({
             emojis: fun ? ['🤘', '💰','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ] :
                 ['⭕','😡','😡','😤','💢','💢','💢','❌','⭕','💩','💩','⛔','⛔','🙅‍♂️','🙅‍♀️','😒','😒','😒','😒'],
             emojiSize: 40
-        }).then(()=>forever && self.haveFun(forever));
+        }).then(()=>forever && self.haveFun(fun, forever));
         return fun;
     };
     /**
      * observables
      */////////////////////////////////////////////////////////////
     self.started = ko.observable(false);
+    self.initials = ko.observable()
     self.userInput = ko.observableArray();
 
 
@@ -100,8 +102,9 @@ export default function vmAccounting(settings){
         return $.ajax({
             type: "post",
             url: "/home/putResults",
-            data: {results: self.answersJSON()},
+            data: {results: self.answersJSON(), initials: self.initials()},
             success: function (response) {
+                response.success && 
                 loader.end('sendAnswers');
             },
             error: function(error){
@@ -134,6 +137,7 @@ export default function vmAccounting(settings){
     self.next = function(index){
         self.currentQuestion().current(false);// unset current
         let i = self.nextUnfinishedIndex(index);
+        if(i === -1 ) return self.showModal();
         self.userInput()[i].current(true);// set current
         window.scrollTo(0, 0);// show the world
     };
@@ -143,24 +147,31 @@ export default function vmAccounting(settings){
             // Show they got it right
             new vmModal({
                 title: "Correct!",
-                message: "Click next to continue.",
+                //particalView: '/home/correct',
+                message: "There are still more records to ammend.",
                 onInit: self.haveFun,
                 buttons: [{ text: "Next", callback: self.next}]// keep going
             });
         }else{// Trial completed
-            self.sendAnswers().then(function(){
-                self.removeCookie()// get rid of the evidence
-                // Congratulations all around //
-                new vmModal({
-                    title: "You Win!",
-                    message: self.userInput().length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
-                    onInit: () => self.haveFun(true, 1),
-                    buttons: [
-                        { text: "Yes", callback: () => window.location.reload() }, // Go insane
-                        { text: "No", callback: () => window.open("https://www.youtube.com/watch?v=KxGRhd_iWuE", '_blank') } // Get inspired and back to work
-                    ]
-                });
+            
+            self.removeCookie()// get rid of the evidence
+            // Congratulations all around //
+            new vmModal({
+                title: "You Win!",
+                partialView: '/home/victory',
+                parent: self,
+                onInit: () => self.haveFun(true, 1),
+                buttons: [
+                    { text: "Witness Me", callback: () => {
+                        self.sendAnswers().then(function(){
+                            window.location.reload() 
+                        })
+                    }
+                    }, // Go insane
+                    { text: "No Thanks", callback: () => window.open("https://www.youtube.com/watch?v=KxGRhd_iWuE", '_blank')}  // Get inspired and back to work
+                ]
             });
+            
         }
         return true;
     }
@@ -169,8 +180,7 @@ export default function vmAccounting(settings){
         if(self.currentQuestion().answered()){// no errors found in answers and all matched
             return self.showModal();
         }
-        self.haveFun(false);
-        return false;
+        return self.haveFun(false);
     };
 
 
@@ -195,10 +205,10 @@ export default function vmAccounting(settings){
             if(self.isCookie(self.cookieName)) self.start()
             else {
                 return new vmModal({
-                    title: "Ready to play?",
-                    message: 'Fill out the fields according to the questions and see if you can get them all. Try it out!',
+                    title: "Something is off here",
+                    partialView: '/home/intro',
                     buttons: [
-                        { text: "Start", callback: function(){ return (self.haveFun() || true) && self.start(); } }// Start
+                        { text: "Start", callback: function(){ return self.haveFun() && self.start(); } }// Start
                     ]
                 });
             }

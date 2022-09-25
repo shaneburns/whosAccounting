@@ -5,10 +5,12 @@ export default function vmModal(settings){
     const self = this;
     self.id = null;
     self.title = settings.title ?? "Modal";
-    self.message = settings.message ?? "This is a message in a modal.";
+    self.message = settings.message ?? null;
     self.buttons = settings.buttons ?? [{text: 'Click Me'}];
     self.defaultResolve = settings.defaultAction ?? self.buttons[0];
-    self.onInit = settings.onInit ?? false
+    self.onInit = settings.onInit ?? false;
+    self.partialView = settings.partialView ?? null;
+    self.parent = settings.parent ?? null;
     /**
      * Functions
      *////////////////////////////////////////////////////////////////
@@ -43,12 +45,38 @@ export default function vmModal(settings){
             }
         });
     };
+    self.getPartial = function(){
+        loader.start('partialGet');
+        return ajax({
+            type: "get",
+            url: self.partialView,
+            success: function (response) {
+                if(response.startsWith('<')){
+                    let div = document.createElement('div');
+                    div.innerHTML = response;
+                    while (div.children.length > 0) {
+                        document.querySelector("#"+self.id+" .modal-card .modal-card-body .content").appendChild(div.children[0]);
+                    }
+                    loader.end('partialGet');
+                }
+            },
+            error: function(error){
+                console.error('Partial Error: ', error);
+            }
+        });
+    };
+
+    self.bindModal = function(){
+        if(self.onInit) self.onInit()
+        ko.applyBindings(self, document.getElementById(self.id));
+        document.querySelector("#"+self.id+" button.is-success").focus();
+    }
 
     self.init = function(){
         return self.getModalMarkUp().then(function(){
-            if(self.onInit) self.onInit()
-            ko.applyBindings(self, document.getElementById(self.id));
-            document.querySelector("#"+self.id+" button.is-success").focus();
+            self.partialView && self.getPartial().then(function(){
+                self.bindModal()
+            }) || self.bindModal();
         });
     }();
 }

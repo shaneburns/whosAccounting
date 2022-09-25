@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17a09053a6fafd23e8669f0492fbff4f",
+    "content-hash": "3b05fa91181e20ad09e03658ffa58e19",
     "packages": [
         {
             "name": "beberlei/porpaginas",
@@ -714,57 +714,6 @@
             "time": "2022-02-28T11:07:21+00:00"
         },
         {
-            "name": "dotsunited/bundlefu",
-            "version": "v1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dotsunited/BundleFu.git",
-                "reference": "d219bef65b5ca1dd6f542c816a1bad88383b924a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dotsunited/BundleFu/zipball/d219bef65b5ca1dd6f542c816a1bad88383b924a",
-                "reference": "d219bef65b5ca1dd6f542c816a1bad88383b924a",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "DotsUnited\\BundleFu": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jan Sorgalla",
-                    "email": "jan.sorgalla@dotsunited.de",
-                    "homepage": "http://dotsunited.de"
-                }
-            ],
-            "description": "BundleFu is a PHP 5.3+ library which bundles multiple css/javascript files into a big package and sends it out at once",
-            "homepage": "https://github.com/dotsunited/BundleFu",
-            "keywords": [
-                "asset",
-                "bundling",
-                "css",
-                "javascript"
-            ],
-            "support": {
-                "issues": "https://github.com/dotsunited/BundleFu/issues",
-                "source": "https://github.com/dotsunited/BundleFu/tree/master"
-            },
-            "time": "2017-12-13T09:31:37+00:00"
-        },
-        {
             "name": "graphp/algorithms",
             "version": "v0.8.2",
             "source": {
@@ -879,33 +828,32 @@
             "time": "2022-02-01T09:26:56+00:00"
         },
         {
-            "name": "mcshane/chem-mvc",
+            "name": "mcshane/chem-core",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/shaneburns/ChemMVC.git",
-                "reference": "1cf5ac04636f08ddaabf33f0c654f407a40965cc"
+                "url": "https://github.com/shaneburns/ChemCore.git",
+                "reference": "da64c02b286d9d50396d2e42f7ea6f297f848d21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shaneburns/ChemMVC/zipball/1cf5ac04636f08ddaabf33f0c654f407a40965cc",
-                "reference": "1cf5ac04636f08ddaabf33f0c654f407a40965cc",
+                "url": "https://api.github.com/repos/shaneburns/ChemCore/zipball/da64c02b286d9d50396d2e42f7ea6f297f848d21",
+                "reference": "da64c02b286d9d50396d2e42f7ea6f297f848d21",
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "*",
                 "doctrine/dbal": "*",
-                "dotsunited/bundlefu": "*",
                 "monolog/monolog": "*",
-                "php": "^7.2",
                 "thecodingmachine/tdbm": "^5.1",
-                "tightenco/overload": "^0.1.3"
+                "tightenco/overload": "*"
             },
             "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "ChemMVC\\": "src"
+                    "ChemCore\\": "src",
+                    "ChemCore\\Modules\\": "modules"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -918,12 +866,12 @@
                     "email": "mcshaneburns@gmail.com"
                 }
             ],
-            "description": "light weight mvc framework for php",
+            "description": "No-Brainer core db code repository management utilizing TheDataBaseMachine ORM framework. Template project coming soon.",
             "support": {
-                "issues": "https://github.com/shaneburns/ChemMVC/issues",
-                "source": "https://github.com/shaneburns/ChemMVC/tree/master"
+                "issues": "https://github.com/shaneburns/ChemCore/issues",
+                "source": "https://github.com/shaneburns/ChemCore/tree/master"
             },
-            "time": "2022-09-25T03:48:28+00:00"
+            "time": "2021-03-22T05:43:23+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -3154,7 +3102,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "mcshane/chem-mvc": 20
+        "mcshane/chem-core": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

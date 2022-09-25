@@ -18,7 +18,6 @@ export function vmToast(settings){
         self.timeout = self.duration < Infinity ? setTimeout(self.destroy, self.duration) : null;
     }
     self.onHover = function(){
-        console.log('here');
         self.timeout && clearTimeout(self.timeout);
         self.timeout = null;
     }

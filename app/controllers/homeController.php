@@ -1,6 +1,9 @@
 <?php 
 namespace app\controllers;
 use ChemMVC\controller as Controller;
+use ChemMVC\result;
+
+use app\models\AccountingModels;
 
 class homeController extends Controller
 {
@@ -8,8 +11,22 @@ class homeController extends Controller
         return parent::view();
     }
 
-    function putResults(array $results){
-        // Dummy function for db interaction
-        print_r($results);
+    function intro(){
+        return parent::view('partial/intro');
+    }
+
+    function victory(){
+        return parent::view('partial/victory');
+    }
+
+    function correct(){
+        return parent::view('partial/correct');
+    }
+
+    function putResults(array $results, string $initials = ''){
+        // Results and Initials of player inbound
+        $accounts = new AccountingModels();// Intance AccountingModels to Access the internal preocess
+        $success = $accounts->EnterInitals($this->chem->tdbmService, $initials);// Put em down for a winning ticket
+        return new result([ "success" => $success ]);
     }
 }

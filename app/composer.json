@@ -3,6 +3,9 @@
         "mcshane/chem-mvc" : "dev-master"
     },
     "autoload": {
-        "psr-4": { "app\\" : "" }
+        "psr-4": { 
+            "app\\" : "", 
+            "core\\" : "../core"
+        }   
     }
 }

@@ -15,7 +15,7 @@
         <h1 class="title is-3" data-bind="visible: started"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
     </header>
 
-    <main class="is-invisible my-6 py-6" data-bind="css: {'is-invisible': !currentQuestion().title}">
+    <main class="is-hidden my-6 py-6" data-bind="css: {'is-hidden': !currentQuestion().title}">
         <form class="container is-flex is-flex-direction-column mt-6" data-bind="submit: haveFun">
             <div id="currentQuestion" class="block" data-bind="with: currentQuestion">
                 <div class="section">
@@ -33,13 +33,13 @@
                     <div class="block box mb-6 pb-6">
                         <h3 class="title block is-underlined">Cash Entries</h3>
                         <ul id="cash" class="group container block" data-bind="foreach: cashEntries">
-                            <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
+                            <?php include(APP_ROOT.ds."views".ds."home".ds."partial".ds."accountingEntryForm.php"); ?>
                         </ul>
                     </div>
                     <div class="block box">
                         <h3 class="title block is-underlined">Accrual Entries</h3>
                         <ul id="accrual" class="group container block" data-bind="foreach: accrualEntries">
-                            <?php include(APP_ROOT.ds."views".ds."home".ds."accountingEntryForm.php"); ?>
+                            <?php include(APP_ROOT.ds."views".ds."home".ds."partial".ds."accountingEntryForm.php"); ?>
                         </ul>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
             </div>
         </form>
     </main>
-    <footer class="footer">
+    <footer class="footer is-hidden" data-bind="css: {'is-hidden': !currentQuestion().title}">
         <div class="content has-text-centered">
             <p>
             <strong>Designed</strong> by <a href="https://shaneburns.com"  target="_blank">Shane Burns</a>
