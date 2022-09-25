@@ -75,10 +75,6 @@ export default function vmAccounting(settings){
                 {text: 'Reject', callback: function(){ self.acceptCookies(false);}, type: 'danger'}
             ]
         }));
-        toastManager.addToast(new vmToast({
-            message: 'Seeing how it happens on the page and through the cycle',
-            dismissable: true
-        }));
     }
     self.acceptanceCookie = () => self.isCookie(self.acceptanceCookieName) ? Cookies.get(self.acceptanceCookieName) : self.updateCookie(self.acceptanceCookieName, null, self.acceptanceCookieExpireIn) && true ? null : false
     
@@ -158,6 +154,7 @@ export default function vmAccounting(settings){
             // Congratulations all around //
             new vmModal({
                 title: "You Win!",
+                dismissable: false,
                 partialView: '/home/victory',
                 parent: self,
                 onInit: () => self.haveFun(true, 1),
@@ -193,9 +190,14 @@ export default function vmAccounting(settings){
         self.answersJSON.subscribe( value => {
             if(self.acceptanceCookie() === false || self.acceptanceCookie() === 'false') return self.isCookie(self.cookieName) && self.removeCookie()
             self.updateCookie(self.cookieName, value, self.cookieExpireIn)
-        }); // update cookie when userInput changes
+        }); // update or reject cookie when userInput changes
         
         self.userInput().findIndex(e=>e.current && e.current()) < 0 && self.next() // if no cookie data kick it off
+        
+        toastManager.addToast(new vmToast({
+            message: 'Articulating splines',
+            dismissable: true
+        }));
     }
     
     self.init = function(){
@@ -205,8 +207,9 @@ export default function vmAccounting(settings){
             if(self.isCookie(self.cookieName)) self.start()
             else {
                 return new vmModal({
-                    title: "Something is off here",
+                    title: "Something seems off...",
                     partialView: '/home/intro',
+                    dismissable: false,
                     buttons: [
                         { text: "Start", callback: function(){ return self.haveFun() && self.start(); } }// Start
                     ]

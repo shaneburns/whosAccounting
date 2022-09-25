@@ -29,4 +29,10 @@ class homeController extends Controller
         $success = $accounts->EnterInitals($this->chem->tdbmService, $initials);// Put em down for a winning ticket
         return new result([ "success" => $success ]);
     }
+
+    function allInitials(){
+        $accounts = new AccountingModels();
+        $formattedList = $accounts->GetListOfInitials($this->chem->tdbmService);
+        return new result($formattedList);
+    }
 }

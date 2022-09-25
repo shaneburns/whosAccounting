@@ -1,9 +1,11 @@
 <div id="modal<?php echo \ChemMVC\utils::GUID(); ?>" class="modal is-active">
-    <div class="modal-background" data-bind="click: resolve"></div>
+    <div class="modal-background" data-bind="click: (dismissable ? clickOff : null)"></div>
     <div class="modal-card animate__animated animate__bounceIn">
         <header class="modal-card-head">
             <p class="modal-card-title" data-bind="html: title"></p>
-            <button class="delete" aria-label="close" data-bind="click: destroy"></button>
+            <!-- ko if: dismissable -->
+                <button class="delete" aria-label="close" data-bind="click: destroy"></button>
+            <!-- /ko -->
         </header>
         <section class="modal-card-body">
             <div class="content is-medium">

@@ -11,6 +11,8 @@ export default function vmModal(settings){
     self.onInit = settings.onInit ?? false;
     self.partialView = settings.partialView ?? null;
     self.parent = settings.parent ?? null;
+    self.dismissable = settings.dismissable ?? true;
+    self.clickOff = settings.clickOff ?? null;
     /**
      * Functions
      *////////////////////////////////////////////////////////////////
@@ -73,6 +75,7 @@ export default function vmModal(settings){
     }
 
     self.init = function(){
+        if(self.dismissable && self.clickOff == null) self.clickOff = self.resolve;
         return self.getModalMarkUp().then(function(){
             self.partialView && self.getPartial().then(function(){
                 self.bindModal()

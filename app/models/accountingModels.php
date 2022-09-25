@@ -17,4 +17,17 @@ class AccountingModels
         }
         return $Balancer;
     }
+    public function GetListOfInitials($ctx){
+        $balDao = new BalancerDao($ctx);
+        $list = $balDao->findAll();
+
+        $map = array_map('formatInitialsList', $list);
+        return $map;
+    }
+    function formatInitialsList($entry){
+        return [
+            "initials" => $entry->getInitials(),
+            "createdAt" => $entry->getCreatedAt()
+        ];
+    }
 }
