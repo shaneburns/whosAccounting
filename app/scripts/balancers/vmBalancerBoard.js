@@ -1,0 +1,40 @@
+import ko from 'knockout';
+
+import vmBalancer from './vmBlancer';
+
+export default function vmBalancerBoard(settings){
+    const self = this;
+
+    // observables
+    self.balancers = ko.observableArray([]);
+    self.loaded = ko.observable(false);
+    self.highlight = ko.observable();
+    
+    // Async
+    self.getList = function(){
+        loader.start('getting list')
+        return fetch('/balancers/allInitials',{headers: {'Content-Type': 'application/json'}})
+            .then(function(response){
+                return response.json();
+            })
+    }
+    self.getGetVars = function(){
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        self.highlight(JSON.parse(urlParams.get('dateTime')));
+    }
+    self.init = function(){
+        self.getList().then((data)=> {
+            self.getGetVars();
+            self.balancers(data.map((e)=> new vmBalancer(e)));
+            loader.end('getting list');
+
+            const offset = self.balancers().length*100 + 270;
+            ko.applyBindings(self)
+            
+            setTimeout(()=> self.loaded(true), offset);
+            if(self.highlight()) setTimeout(()=> document.querySelector('.highlight').scrollIntoView({behavior: 'smooth', block: 'center'}), offset/2)
+        })
+    }();
+    return self;
+}

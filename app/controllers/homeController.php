@@ -26,13 +26,8 @@ class homeController extends Controller
     function putResults(array $results, string $initials = ''){
         // Results and Initials of player inbound
         $accounts = new AccountingModels();// Intance AccountingModels to Access the internal preocess
-        $success = $accounts->EnterInitals($this->chem->tdbmService, $initials);// Put em down for a winning ticket
-        return new result([ "success" => $success ]);
-    }
+        $entry = $accounts->EnterInitials($this->chem->tdbmService, $initials);// Put em down for a winning ticket
 
-    function allInitials(){
-        $accounts = new AccountingModels();
-        $formattedList = $accounts->GetListOfInitials($this->chem->tdbmService);
-        return new result($formattedList);
+        return new result([ "success" => is_array($entry), "dateTime" => (is_array($entry) ? $entry['dateTime'] : '') ]);
     }
 }

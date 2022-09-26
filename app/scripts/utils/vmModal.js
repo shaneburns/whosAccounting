@@ -9,6 +9,7 @@ export default function vmModal(settings){
     self.buttons = settings.buttons ?? [{text: 'Click Me'}];
     self.defaultResolve = settings.defaultAction ?? self.buttons[0];
     self.onInit = settings.onInit ?? false;
+    self.onDestroy = settings.onDestroy ?? false;
     self.partialView = settings.partialView ?? null;
     self.parent = settings.parent ?? null;
     self.dismissable = settings.dismissable ?? true;
@@ -23,6 +24,7 @@ export default function vmModal(settings){
     };
 
     self.destroy = function(){
+        if(self.onDestroy && self.onDestroy instanceof Function) self.onDestroy();
         document.getElementById(self.id).remove();
     };
 

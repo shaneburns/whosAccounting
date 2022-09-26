@@ -1,0 +1,36 @@
+body
+    header.navbar
+        min-height: 3.6rem
+        background: none//linear-gradient(to top, transparent, $seeThroughWhite, #fff)
+        z-index: 16
+        +transition(all .23641s linear)
+        &.onTop
+            background: none
+            z-index: 25000
+            h1
+                color: #fff
+                text-shadow: -2px 2px 3px $seeThroughWhite, -15px 5px 5px #302b2b79
+        div
+            +transition(all .23641s linear)
+            h1
+                position: relative
+                width: 100%
+                text-align: center
+                padding: 4rem 0 3rem
+                color: #000
+                text-shadow: -2px 2px 3px #fff, -15px 5px 5px #302b2b79
+                +transition(all .23641s linear)
+                animation: tada 5s ease 1s infinite, bounceInDown 1s 1
+                span
+                    position: absolute
+                    display: inline-block
+                    margin-left: -2rem
+                    z-index: -1
+                    animation:  floatingLogo 10s ease 2s infinite both, bounceInLeft 1s .75s backwards
+                    &:last-of-type
+                        animation:  floatingLogo 10s ease 2s infinite reverse both, bounceInRight 1s .25s backwards
+                        margin-left: -1rem
+            &.scrolled
+                +transform(scale(.5))
+                h1
+                    padding: .5rem 0 0 0

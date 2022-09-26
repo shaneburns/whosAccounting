@@ -3,7 +3,6 @@
     $this->title = "Reclique/DaxCo - Technical Interview ";
     $this->description = "Reclique Technical Interview";
     array_push($this->styles, 
-        "/css/dist/myBulma.min.css",
         "/css/dist/accounting.min.css"
     );
 
@@ -11,19 +10,23 @@
 ?>
 
 <body class="has-navbar-fixed-top is-clipped">
-    <header class="navbar is-fixed-top" data-bind="css: {onTop: !currentQuestion().title}">
-        <h1 class="title is-3" data-bind="visible: started"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+    <header class="navbar is-fixed-top" data-bind="css: {onTop: modal()}">
+        <div class="is-overlay" data-bind="css: {scrolled: scrollTop() > 130}">
+            <h1 class="title is-3" data-bind="visible: running() || modal()"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+        </div>
     </header>
 
     <main class="is-hidden my-6 py-6" data-bind="css: {'is-hidden': !currentQuestion().title}">
         <form class="container is-flex is-flex-direction-column mt-6" data-bind="submit: haveFun">
             <div id="currentQuestion" class="block" data-bind="with: currentQuestion">
-                <div class="section">
-                    <h2 class="title is-1 is-underlined" data-bind="text: title"></h2>
-                    <h3 class="subtitle block ml-4 " data-bind="text: ' of ' + $root.questions.length"></h3>
-                    <div id="question" class="block is-size-3 has-text-centered" data-bind="text: description + '?'"></div>
+                <div id="questionContainer" class="block">
+                    <div class="section box container" data-bind="css: {'fixTop animate__animated animate__slideInDown': $parent.scrollTop() > 400}">
+                        <h2 class="title is-1 is-underlined" data-bind="text: title"></h2>
+                        <h3 class="subtitle block ml-4 " data-bind="text: ' of ' + $root.questions.length"></h3>
+                        <p id="question" class="block has-text-centered" data-bind="text: description + '?'"></p>
+                    </div>
                 </div>
-                <div id="indicators" class="container is-flex is-justify-content-center block">
+                <div id="indicators" class="container is-flex is-justify-content-center block"">
                     <div data-bind="foreach: $root.questions"  class="columns">
                         <div class="column button is-white py-1 px-3 is-inline-block" data-bind="css: {curr: $index() == $root.currentIndex()}, attr: {title: title}, text: $root.userInput()[$index()] && $root.userInput()[$index()].answered() ? '&#x2705;' : $index() == $root.currentIndex() ? '&#10687;' :  '&#10686;', click: () => $root.next($index())"></div>
                     </div>
@@ -45,9 +48,10 @@
                 </div>
             </div>
 
-            <div class="section mb-6">
-                <div class="columns pb-6">
-                    <input id="submit" type="submit" class="button box is-large is-success column is-half is-offset-one-quarter is-half-mobile is-offset-one-quarter-mobile" data-bind="click: currentQuestion().answered() ? next : currentQuestion().matchAll, value: currentQuestion().answered() ? 'Next' : 'Submit'"/>
+            <div class="section">
+                <div class="columns">
+                    <input id="submit" type="submit" class="button box is-large is-success column is-half is-offset-one-quarter is-half-mobile is-offset-one-quarter-mobile" 
+                        data-bind="click: currentQuestion().answered() ? next : currentQuestion().matchAll, value: currentQuestion().answered() ? 'Next' : 'Submit'"/>
                 </div>    
             </div>
         </form>
@@ -56,6 +60,9 @@
         <div class="content has-text-centered">
             <p>
             <strong>Designed</strong> by <a href="https://shaneburns.com"  target="_blank">Shane Burns</a>
+            </p>
+            <p>
+                Complete all entries to earn your spot on the <a href="/balancers"  target="_blank">Balancer Board</a>
             </p>
             <p>
                 <em>

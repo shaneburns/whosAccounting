@@ -24,7 +24,7 @@ export default function vmQuestion(settings, parent){
 
     self.current.subscribe(function (v){
         if(!v) return;
-        return setTimeout(self.setEntryFocus, 200)
+        return setTimeout(()=>self.setEntryFocus(), 200)
     })
 
     /**
@@ -62,13 +62,13 @@ export default function vmQuestion(settings, parent){
         return self.findMatch(self.cashEntries, "cash") + self.findMatch(self.accrualEntries, "accrual") == 0;
     };
 
-    self.setEntryFocus = function(){// Just for usability - Auto focus next appropriate input element
+    self.setEntryFocus = function(position = 'center'){// Just for usability - Auto focus next appropriate input element
         let i = self.cashEntries().findIndex(e=>!e.match()),
             j = self.accrualEntries().findIndex(e=>!e.match());
         i = i >= 0 ? "ul#cash li:nth-of-type("+(i+1)+")" : undefined;
         j = j >= 0 ? "ul#accrual li:nth-of-type("+(j+1)+")" : undefined;
         let offender =  (i || j) ? document.querySelector((i ?? j) +" input:not(:valid), " + (i ?? j) + " select:not(:valid), " + (i ?? j) + " input:placeholder-shown") || document.querySelector((i ?? j) + " input") : null
-        return offender != null ? offender.focus() : (i !== undefined || j !== undefined) ?  setTimeout(self.setEntryFocus, 200) : null;
+        return offender != null ? (offender.focus() || true) && offender.scrollIntoView({behavior: 'smooth', block: position }) : (i !== undefined || j !== undefined) ?  setTimeout(self.setEntryFocus, 200) : null;
     };
 
     self.set = function(q){
@@ -81,12 +81,27 @@ export default function vmQuestion(settings, parent){
 
         if(self.cashEntries().length === 0 && self.accrualEntries().length === 0){
             for(let i = 0; i <= self.correct_answers.length - 1; i++){
+                //let ce;
                 for(let j = 0; j <= self.correct_answers[i].entries.length - 1; j++){
+                    //ce = self.correct_answers[i].entries[j];
                     if(self.correct_answers[i].type == 'cash'){
-                        self.cashEntries.push(new vmEntry({type: 'cash'}, self));
+                        self.cashEntries.push(new vmEntry({
+                            type: 'cash'//,
+                            // when: ce.when,
+                            // selectedType: ce.type,
+                            // dr: ce.Dr,
+                            // cr: ce.Cr
+                        
+                        }, self));
                     }
                     if(self.correct_answers[i].type == 'accrual'){
-                        self.accrualEntries.push(new vmEntry({type: 'accrual'}, self));
+                        self.accrualEntries.push(new vmEntry({
+                            type: 'accrual',
+                            when: ce.when,
+                            selectedType: ce.type,
+                            dr: ce.Dr,
+                            cr: ce.Cr
+                        }, self));
                     }
                 }
             }

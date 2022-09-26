@@ -7,7 +7,7 @@ export function vmToast(settings){
     self.id = null;
     self.parent = null;
     self.duration = settings.duration ?? 5000;
-    self.dismissable = settings.dismissable ?? false;
+    self.dismissable = settings.dismissable ?? true;
     self.message = settings.message ?? "This is a message in a toast.";
     self.buttons = settings.buttons ?? [];
     self.timeout = null;
