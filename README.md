@@ -2,7 +2,9 @@
 
 # whosAccounting - Reclique - Technical Interview
 
-[My solution](https://accounting.shaneburns.com/) for the following [requirements](https://reclique.github.io/web-dev-testing/1_accounting_game/).
+<a href="https://accounting.shaneburns.com/" target="_blank"><image alt="QR Code Link" src="https://accounting.shaneburns.com/images/qrcode.png" width="300"></a>
+
+Scan or click the qr code above to view my solution following <a href="https://reclique.github.io/web-dev-testing/1_accounting_game/" target="_blank">these requirements</a>.
 
 ## Description
 
