@@ -12,7 +12,9 @@
 <body class="has-navbar-fixed-top is-clipped">
     <header class="navbar is-fixed-top" data-bind="css: {onTop: modal()}">
         <div class="is-overlay" data-bind="css: {scrolled: scrollTop() > 130}">
-            <h1 class="title is-3" data-bind="visible: running() || modal()"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+            <a href="/">
+                <h1 class="title is-3" data-bind="visible: running() || modal()"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+            </a>
         </div>
     </header>
 

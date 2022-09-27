@@ -12,7 +12,9 @@
 <body class="has-navbar-fixed-top is-clipped">
     <header class="navbar is-fixed-top">
         <div class="is-overlay">
-            <h1 class="title is-3"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+            <a href="/">
+                <h1 class="title is-3"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+            </a>
         </div>
     </header>
 

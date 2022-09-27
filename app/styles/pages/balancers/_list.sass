@@ -2,17 +2,15 @@ body
     ul
         li.box.content
             min-width: 250px
-            +transform(scale(1))
             +transition(transform .23689s ease-in-out)
             animation-count: 1
             &:last-of-type
                 margin-bottom: 1.5rem
             &:not(.loading):hover
-                z-index: 100
+                z-index: 10
                 animation-name: swing
-                +transform(scale(1.03654))
         .highlight.active
             animation: tada 1s linear infinite
-            z-index: 101
+            z-index: 11
             p
                 color: inherit

@@ -1,4 +1,6 @@
 <?php
-    define("APP_ROOT", '../app');
-    require_once APP_ROOT.'/config/init.php';
-    $main = new Main();
+namespace app;
+define("APP_ROOT", '../app');
+require_once APP_ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+    
+    $main = new main();
