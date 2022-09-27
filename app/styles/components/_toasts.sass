@@ -1,0 +1,15 @@
+div#toasts
+    position: fixed
+    bottom: 0
+    right: 0
+    z-index: 5
+    div#toastWrapper
+        ul
+            max-width: 500px
+            li
+                border: 1px solid transparent
+                opacity: .7895
+                +transition(opacity .3s ease-in-out)
+                &:hover
+                    border-color: #505050
+                    opacity: 1

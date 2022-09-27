@@ -1,10 +1,21 @@
-<div id="modal<?php echo \ChemMVC\utils::GUID(); ?>" class="modalWrapper">
-    <div class="clickOffModal" data-bind="click: resolve"></div>
-    <div class="modalBody">
-        <h2 data-bind="html: title"></h2>
-        <p data-bind="text: message"></p>
-        <div class="modalButtons" data-bind="foreach: buttons">
-            <input type="submit" data-bind="value: text, click: $parent.resolve, css: {defaultBtn: $index() == 0}">
-        </div>
+<div id="modal<?php echo \ChemMVC\utils::GUID(); ?>" class="modal is-active">
+    <div class="modal-background" data-bind="click: (dismissable ? clickOff : null)"></div>
+    <div class="modal-card animate__animated animate__bounceIn">
+        <header class="modal-card-head">
+            <p class="modal-card-title" data-bind="html: title"></p>
+            <!-- ko if: dismissable -->
+                <button class="delete" aria-label="close" data-bind="click: destroy"></button>
+            <!-- /ko -->
+        </header>
+        <section class="modal-card-body">
+            <div class="content is-medium">
+                <p data-bind="text: message"></p>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+            <div data-bind="foreach: buttons">
+                <button class="button" data-bind="text: text, click: $parent.resolve, css: {'is-success': $index() == 0, 'is-danger': $index() == $parent.buttons.length}"></button>
+            </div>
+        </footer>
     </div>
 </div>

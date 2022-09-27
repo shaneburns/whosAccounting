@@ -4,7 +4,8 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    'accountBundle': path.join(__dirname, 'accounting/main.js')
+    'accountBundle': path.join(__dirname, 'accounting/main.js'),
+    'balancerBundle': path.join(__dirname, 'balancers/main.js')
   },
   output: {
     path: path.join(__dirname, '../../public/scripts/dist'),

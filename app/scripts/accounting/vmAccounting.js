@@ -1,11 +1,12 @@
-import $, { ajax } from 'jquery'
-import ko from 'knockout'
-import 'knockout-mapping'
-import Cookies from 'js-cookie'
-import JSConfetti from 'js-confetti'
+import $, { ajax } from 'jquery';
+import ko from 'knockout';
+import 'knockout-mapping';
+import Cookies from 'js-cookie';
+import JSConfetti from 'js-confetti';
 
-import vmQuestion from './vmQuestion.js'
-import vmModal from '../utils/vmModal.js'
+import vmQuestion from './vmQuestion.js';
+import vmModal from '../utils/vmModal.js';
+import {vmToast} from './../utils/vmToastManager.js';
 
 export default function vmAccounting(settings){
     const self = this;
@@ -14,29 +15,33 @@ export default function vmAccounting(settings){
      */////////////////////////////////////////////////////////////
     self.questionSource = settings.url;
     self.questions = [];
-    self.cookieName = settings.cookieName ?? 'ACCOUNT_ME_IN';
+    self.cookieName = settings.cookieName ?? 'ACCOUNT_AFTER_ME';
     self.cookieExpireIn = settings.expireIn ?? 7;
+    self.acceptanceCookieName = settings.acceptanceCookieName ?? 'ACCOUNT_ME_IN';
+    self.acceptanceCookieExpireIn = settings.acceptanceExpireIn ?? 31;
     self.fun = new JSConfetti();
-    self.haveFun = function(forever = 0){
-        self.fun.addConfetti({emojis: ['🤘', '💰', '👍','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ]}).then(()=>forever && self.haveFun(forever))
-        return true;
-    }
     /**
      * observables
      */////////////////////////////////////////////////////////////
+    self.running = ko.observable(false);
+    self.initials = ko.observable()
     self.userInput = ko.observableArray();
+    self.scrollTop = ko.observable();
+    self.modal = ko.observable();
+    self.answerJSONSub = null;
+    
 
 
     /**
     * computed
     */////////////////////////////////////////////////////////////
-    self.currentIndex = ko.computed(function(){
+    self.currentIndex = ko.pureComputed(function(){
         return self.userInput().findIndex(e=>e && e.current()) ?? 0;
     })
-    self.currentQuestion = ko.computed(function(){
+    self.currentQuestion = ko.pureComputed(function(){
         return  self.userInput()[self.currentIndex()] ?? new vmQuestion();
     })
-    self.answersJSON = ko.computed(function() { 
+    self.answersJSON = ko.pureComputed(function() { 
         return JSON.stringify(self.userInput().map(answer => answer.toFormatted()));
     });
     
@@ -48,8 +53,27 @@ export default function vmAccounting(settings){
     // Cookie CRUD
     self.isCookie = (cookieName) => Cookies.get(cookieName) && Cookies.get(cookieName) !== 'undefined';
     self.updateCookie = (cookieName, val, expireIn) => Cookies.set(cookieName, val, {expires: expireIn, path: '' });
-    self.getCookie = () => JSON.parse( self.isCookie(self.cookieName) ? Cookies.get(self.cookieName) : '[]' ).map(userInput => new vmQuestion(userInput));
+    self.getCookie = () => JSON.parse( self.isCookie(self.cookieName) ? Cookies.get(self.cookieName) : '[]' );
     self.removeCookie = () => Cookies.remove(self.cookieName, {expires: -1, path: '' });
+    self.acceptCookies = function(verdict){
+        self.updateCookie(self.acceptanceCookieName, verdict, self.acceptanceExpireIn)
+        if(!verdict) self.removeCookie()
+    }
+
+    // Accepting Cookies - a two step process
+    self.showCookieAcceptanceToast = function(){
+        toastManager.addToast(new vmToast({
+            message: 'Cookies are being dunked and gobbled for this website. <a class="is-underlined" href="https://cookiesandyou.com" rel="noopener noreferrer nofollow" target="_blank" style="">What are cookies?</a>',
+            duration: Infinity, 
+            dismissable: false,
+            buttons: [
+                {text: '🍪 Sweet 🥛', callback: function(){ self.acceptCookies(true);}, type: 'success'},
+                {text: 'Reject', callback: function(){ self.acceptCookies(false);}, type: 'danger'}
+            ]
+        }));
+    }
+    self.acceptanceCookie = () => self.isCookie(self.acceptanceCookieName) ? Cookies.get(self.acceptanceCookieName) : self.updateCookie(self.acceptanceCookieName, null, self.acceptanceCookieExpireIn) && true ? null : false
+    
 
     // Async calls
     self.getQuestions = function(){ // aquire json object with questions
@@ -70,7 +94,7 @@ export default function vmAccounting(settings){
         return $.ajax({
             type: "post",
             url: "/home/putResults",
-            data: {results: self.answersJSON()},
+            data: {results: self.answersJSON(), initials: self.initials()},
             success: function (response) {
                 loader.end('sendAnswers');
             },
@@ -82,19 +106,19 @@ export default function vmAccounting(settings){
 
     // User Interactions
     // Add designated question to userInput array
-    self.addUserInput = (index) => self.userInput.splice(index, 1, new vmQuestion(self.questions[index]));
+    self.addUserInput = (index) => self.userInput.splice(index, 1, new vmQuestion(self.questions[index], self));
     
     self.nextUnfinishedIndex = function(wanted){
-        if(typeof wanted == 'number'){
-            if(self.userInput()[wanted] == undefined) self.addUserInput(wanted);
-            return wanted
+        if(typeof wanted == 'number'){ // If a specific Index is being requested
+            if(self.userInput()[wanted] == undefined) self.addUserInput(wanted); // add the index if it doesn't exist
+            return wanted; // it's good to go
         }
         let index = self.userInput().findIndex(Object.is.bind(null, undefined));// find index of first undefined element
-        if(index == -1) index = self.userInput().findIndex((e)=> e.answered == false); // no undefined - find unfinished
+        if(index == -1) index = self.userInput().findIndex((e)=> e.answered() == false); // no undefined - find unfinished
 
-        // no unfinished and user isnt finished with all questions
+        // no unfinished questions but the user hasn't completed all questions
         if(index == -1 && self.userInput().length < self.questions.length){
-            // add the next question using array length ass index
+            // add the next question
             index = self.userInput().length;
             self.addUserInput(index);
         }
@@ -103,67 +127,118 @@ export default function vmAccounting(settings){
 
     self.next = function(index){
         self.currentQuestion().current(false);// unset current
-        let i = self.nextUnfinishedIndex(index);
+        let i = self.nextUnfinishedIndex(index);// find next appropriate index
+        if(i === -1 ) return self.showModal();
         self.userInput()[i].current(true);// set current
-        window.scrollTo(0, 0);// show the world
     };
-    
-    self.checkAnswers = function(){
-        if(self.currentQuestion().isCorrect()){// no errors found in answers and all matched
-            self.currentQuestion().answered = true;// mark it forever answered
+
+    self.showModal = function(){            
+        if(self.questions.length != self.userInput().length || self.nextUnfinishedIndex() >= 0){// if short on answers or there are any unfinished
+            // Show they got it right
+            self.modal(new vmModal({
+                title: "Correct!",
+                //partialView: '/home/correct',
+                message: "There are still records to amend.",
+                onInit: ()=> self.haveFun() && window.scrollTo(0,0),
+                onDestroy: ()=> self.modal(false),
+                buttons: [{ text: "Next", callback: self.next}]// keep going
+            }));
+        }else if(self.running()){// Trial completed
+            self.running(false)// turn off the oven
+            self.answerJSONSub.dispose(); // dispose of the evidence
+            self.updateCookie(self.cookieName, JSON.stringify('You Win'), self.cookieExpireIn);// make sure they know about it
             
-            if(self.questions.length != self.userInput().length || self.nextUnfinishedIndex() >= 0){// if short on answers or there are any unfinished
-                // Show they got it right
-                new vmModal({
-                    title: "Correct!",
-                    message: "Click next to continue.",
-                    onInit: self.haveFun,
-                    buttons: [{ text: "Next", callback: self.next}]// keep going
-                });
-            }else{// Trial completed
-                self.sendAnswers().then(function(){
-                    self.removeCookie()// get rid of the evidence
-                    // Congratulations all around //
-                    new vmModal({
-                        title: "You Win!",
-                        message: self.userInput().length + " out of " + self.questions.length +" answered correctly! Wanna try again?",
-                        onInit: () => self.haveFun(1),
-                        buttons: [
-                            { text: "Yes", callback: () => window.location.reload() }, // Go insane
-                            { text: "No", callback: () => { location.href="https://www.youtube.com/watch?v=KxGRhd_iWuE"; } // Get inspired and back to work
-                        }]
-                    });
-                });
-            }
+            // Congratulations all around //
+            self.modal(new vmModal({
+                title: "You've Done It!",
+                dismissable: false,
+                partialView: '/home/victory',
+                parent: self,
+                onInit: () => self.haveFun(true, 1) && window.scrollTo(0,0),
+                buttons: [
+                    { 
+                        text: "Send Initials", 
+                        callback: () => {
+                            self.sendAnswers().then(function(response){// Initials sent and stored
+                                let r =  JSON.parse(response);
+                                if(r && r.success){
+                                    window.open("/balancers?dateTime="+JSON.stringify(r.dateTime), '_blank');
+                                }
+                                window.location.reload();
+                            })
+                        }
+                    }, 
+                    { text: "No Thanks", callback: () => window.open("https://www.youtube.com/watch?v=KxGRhd_iWuE", '_blank')}  // Get inspired and back to work
+                ]
+            }));
+            
         }
+        return true;
+    }
+
+    // Add some flare
+    self.haveFun = function(fun = true, forever = 0){
+        self.fun.addConfetti({
+            emojis: fun ? ['🤘', '💰','✍', '🧠', '💁‍♀️', '💁‍♂️','👩‍💻', '🍍', '⚙', '💣', '🔑', '📈', '📉', '📊','📋' , '📐' ] :
+                ['⭕','😡','😡','😤','💢','💢','💢','❌','⭕','💩','💩','⛔','⛔','🙅‍♂️','🙅‍♀️','😒','😒','😒','😒'],
+            emojiSize: 40
+        }).then(()=>forever && self.haveFun(fun, forever));
+        return fun;
     };
+
+    // Events
+    document.addEventListener('scroll', (e)=> self.scrollTop(window.scrollY))
 
 
     /**\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
      * init                                              |||||||
      */////////////////////////////////////////////////////////
     self.start = function(){
-        self.userInput(self.getCookie()); // Check for cookie containing unfinished answer array
-            
-        self.answersJSON.subscribe( value => self.updateCookie(self.cookieName, value, self.cookieExpireIn)); // update cookie when userInput changes
+        let cookieVal = self.getCookie();
+        if(cookieVal === 'You Win'){
+            self.modal(new vmModal({
+                title: "That's it for now",
+                partialView: '/home/victoryLanding',
+                dismissable: false,
+                buttons: [
+                    {text: 'Reset', callback: ()=> { self.removeCookie(); location.reload(); }}
+                ]
+            }));
+            return;
+        }
+
+        self.userInput(cookieVal.map(userInput => new vmQuestion(userInput, self))); // Check for cookie containing unfinished answer array
+
+        self.answerJSONSub = self.answersJSON.subscribe( value => {
+            if(self.acceptanceCookie() === false || self.acceptanceCookie() === 'false') return self.isCookie(self.cookieName) && self.removeCookie()
+            self.updateCookie(self.cookieName, value, self.cookieExpireIn)
+        }); // update or reject cookie when userInput changes
         
         self.userInput().findIndex(e=>e.current && e.current()) < 0 && self.next() // if no cookie data kick it off
+        
+        toastManager.addToast(new vmToast({
+            message: 'Articulating splines'
+        }));
     }
     
     self.init = function(){
+        if(self.acceptanceCookie() == null || self.acceptanceCookie() == 'null') self.showCookieAcceptanceToast()
         self.getQuestions().then(function(){// start by getting the questions
+            self.running(true);
             if(self.isCookie(self.cookieName)) self.start()
             else {
-                return new vmModal({
-                    title: "Ready to play?",
-                    message: 'Fill out the fields according to the questions and see if you can get them all. Try it out!',
+                self.modal(new vmModal({
+                    title: "Something seems off...",
+                    partialView: '/home/intro',
+                    dismissable: false,
+                    onDestroy: ()=> self.modal(false),
                     buttons: [
                         { text: "Start", callback: function(){ return self.haveFun() && self.start(); } }// Start
                     ]
-                });
+                }));
+                return
             }
         });
-        window.haveFun = self.haveFun;
     }();
 
     return self;

@@ -17,6 +17,7 @@ class Main
         $customVars = array(
             'ROOT' => '../app',
             'PROJECT_NAMESPACE' => 'app', // This should utilize a 'psr' autoloaded namespace *Required for chemistry project to work correctly
+            'CORE_NAMESPACE' => 'core',
             'ENV_DETAILS_PATH' => APP_ROOT.DIRECTORY_SEPARATOR.'.env',
             'CONTROLLER_NAMESPACE' => 'controllers',
             // 'CORE_NAMESPACE' => 'core'

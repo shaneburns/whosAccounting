@@ -10,7 +10,7 @@ export default function vmLoader(settings){
     self.processes = ko.observableArray();
 
     self.isRunning = function(processName){
-        return self.processes().indexOf(processName) !== -1;
+        return (processName && self.processes().indexOf(processName) !== -1) || self.processes().length;
     };
     self.end = function(processName){
         self.processes.remove(processName);
@@ -22,7 +22,7 @@ export default function vmLoader(settings){
     self.getLoader = function(){
         return $.ajax({
             url: "/utils/loader",
-            success: function (response) {
+            success: (response) => {
                 if(response.startsWith('<div id="loaderProtector')){
                     let div = document.createElement('div');
                     div.innerHTML = response;

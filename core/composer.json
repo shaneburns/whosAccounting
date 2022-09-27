@@ -1,0 +1,10 @@
+{
+    "require":{
+        "mcshane/chem-core" : "dev-master"
+    },
+    "autoload": {
+        "psr-4": { 
+            "core\\" : ""
+        }
+    }
+}
