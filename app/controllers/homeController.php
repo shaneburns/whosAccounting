@@ -1,7 +1,9 @@
 <?php 
 namespace app\controllers;
+
 use ChemMVC\controller as Controller;
-use ChemMVC\result;
+use ChemCommon\dbContext;
+use ChemCommon\result;
 
 use app\models\AccountingModels;
 
@@ -29,8 +31,9 @@ class homeController extends Controller
 
     function putResults(array $results, string $initials = ''){
         // Results and Initials of player inbound
+        $db = new dbContext();
         $accounts = new AccountingModels();// Intance AccountingModels to Access the internal preocess
-        $entry = $accounts->EnterInitials($this->chem->tdbmService, $initials);// Put em down for a winning ticket
+        $entry = $accounts->EnterInitials($db->ctx, $initials);// Put em down for a winning ticket
 
         return new result([ "success" => is_array($entry), "dateTime" => (is_array($entry) ? $entry['dateTime'] : '') ]);
     }

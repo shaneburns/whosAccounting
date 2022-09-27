@@ -9,7 +9,12 @@
     include(APP_ROOT.ds."views".ds."shared".ds."head.php");
 ?>
 
-<body class="is-clipped">
+<body class="has-navbar-fixed-top is-clipped">
+    <header class="navbar is-fixed-top">
+        <div class="is-overlay">
+            <h1 class="title is-3"><span class="money has-text-success">$🧠</span> ¿Who's Accounting? <span class="money has-text-success">💰</span></h1>
+        </div>
+    </header>
 
     <main class="content section block mt-6 is-hidden" data-bind="css: {'is-hidden': balancers().length === 0}">
         <h1 class="title is-1">Board of Balancers</h1>

@@ -1,6 +1,18 @@
 {
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/shaneburns/ChemMVC.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/shaneburns/ChemCommon.git"
+        }
+    ],
     "require": {
-        "mcshane/chem-mvc" : "dev-master"
+        "PHP": "^7.4",
+        "mcshane/chem-mvc" : "dev-master",
+        "mcshane/chem-common" : "@dev"
     },
     "autoload": {
         "psr-4": { 

@@ -1,9 +1,8 @@
 <?php
 // namespace config;
 require_once APP_ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-use ChemMVC\startup;
-use ChemMVC\bundleConfig;
-use ChemMVC\chemistry;
+use ChemCommon\config;
+use ChemMVC\ChemMVC;
 /**
  *
  */
@@ -22,9 +21,9 @@ class Main
             'CONTROLLER_NAMESPACE' => 'controllers',
             // 'CORE_NAMESPACE' => 'core'
         );
-        // Instantiate a startup configuration object
-        $this->config = new startup($customVars);
+        // Instantiate a startup array configuration vars for this app
+        $this->config = new config($customVars);
         // Instantiate Chemistry MVC - pass in config
-        $this->chem = new chemistry($this->config);
+        $this->chem = new ChemMVC($this->config);
     }
 }

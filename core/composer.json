@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type" : "path",
+            "url" : "../../ChemCore"
+        }
+    ],
     "require":{
         "mcshane/chem-core" : "dev-master"
     },

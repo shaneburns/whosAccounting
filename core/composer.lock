@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3b05fa91181e20ad09e03658ffa58e19",
+    "content-hash": "847c3c032d685da0d388bb685a8feb16",
     "packages": [
         {
             "name": "beberlei/porpaginas",
@@ -830,16 +830,10 @@
         {
             "name": "mcshane/chem-core",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/shaneburns/ChemCore.git",
-                "reference": "da64c02b286d9d50396d2e42f7ea6f297f848d21"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/shaneburns/ChemCore/zipball/da64c02b286d9d50396d2e42f7ea6f297f848d21",
-                "reference": "da64c02b286d9d50396d2e42f7ea6f297f848d21",
-                "shasum": ""
+                "type": "path",
+                "url": "../../ChemCore",
+                "reference": "da64c02b286d9d50396d2e42f7ea6f297f848d21"
             },
             "require": {
                 "doctrine/cache": "*",
@@ -848,7 +842,6 @@
                 "thecodingmachine/tdbm": "^5.1",
                 "tightenco/overload": "*"
             },
-            "default-branch": true,
             "type": "library",
             "autoload": {
                 "psr-4": {
@@ -856,7 +849,6 @@
                     "ChemCore\\Modules\\": "modules"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -867,11 +859,9 @@
                 }
             ],
             "description": "No-Brainer core db code repository management utilizing TheDataBaseMachine ORM framework. Template project coming soon.",
-            "support": {
-                "issues": "https://github.com/shaneburns/ChemCore/issues",
-                "source": "https://github.com/shaneburns/ChemCore/tree/master"
-            },
-            "time": "2021-03-22T05:43:23+00:00"
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "monolog/monolog",
@@ -1027,27 +1017,27 @@
         },
         {
             "name": "mouf/magic-query",
-            "version": "v1.4.6",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/magic-query.git",
-                "reference": "d4940bdd52690af0139c4d93b6ab4ba2653a3225"
+                "reference": "7efa677ee73d7e5681f80b5f85526ab5ebe8eb41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/magic-query/zipball/d4940bdd52690af0139c4d93b6ab4ba2653a3225",
-                "reference": "d4940bdd52690af0139c4d93b6ab4ba2653a3225",
+                "url": "https://api.github.com/repos/thecodingmachine/magic-query/zipball/7efa677ee73d7e5681f80b5f85526ab5ebe8eb41",
+                "reference": "7efa677ee73d7e5681f80b5f85526ab5ebe8eb41",
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "^1.5",
-                "greenlion/php-sql-parser": "^4.1.2",
+                "greenlion/php-sql-parser": "^4.3",
                 "mouf/schema-analyzer": "~1.0",
                 "mouf/utils.common.conditioninterface": "~2.0",
                 "mouf/utils.common.paginable-interface": "~1.0",
                 "mouf/utils.common.sortable-interface": "~1.0",
                 "mouf/utils.value.value-interface": "~1.0",
-                "php": ">=7.1.0",
+                "php": "^7.4 || ^8.0",
                 "twig/twig": "^2.11 || ^3"
             },
             "conflict": {
@@ -1055,8 +1045,8 @@
             },
             "require-dev": {
                 "doctrine/dbal": "~2.5",
-                "phpstan/phpstan": "^0.11.7",
-                "phpunit/phpunit": "^7.5.10",
+                "phpstan/phpstan": "^0.12.82",
+                "phpunit/phpunit": "^9.5",
                 "satooshi/php-coveralls": "~1.0"
             },
             "suggest": {
@@ -1106,9 +1096,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thecodingmachine/magic-query/issues",
-                "source": "https://github.com/thecodingmachine/magic-query/tree/v1.4.6"
+                "source": "https://github.com/thecodingmachine/magic-query/tree/v1.5.0"
             },
-            "time": "2020-08-03T21:50:43+00:00"
+            "time": "2021-09-23T12:41:47+00:00"
         },
         {
             "name": "mouf/schema-analyzer",
@@ -1509,20 +1499,20 @@
         },
         {
             "name": "psr/container",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf"
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/8622567409010282b7aeebe4bb841fe98b58dcaf",
-                "reference": "8622567409010282b7aeebe4bb841fe98b58dcaf",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/513e0666f7216c7459170d56df27dfcefe1689ea",
+                "reference": "513e0666f7216c7459170d56df27dfcefe1689ea",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "autoload": {
@@ -1551,9 +1541,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/1.1.1"
+                "source": "https://github.com/php-fig/container/tree/1.1.2"
             },
-            "time": "2021-03-05T17:36:06+00:00"
+            "time": "2021-11-05T16:50:12+00:00"
         },
         {
             "name": "psr/log",
