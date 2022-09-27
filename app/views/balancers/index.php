@@ -25,7 +25,8 @@
                         css: {
                             'animate__bounceIn loading': !$parent.loaded(), 
                             'highlight': createdAt() == $parent.highlight(),
-                            'active has-text-light has-background-success': $parent.loaded() && createdAt() == $parent.highlight()
+                            'has-text-light has-background-success': $parent.loaded() && createdAt() == $parent.highlight(),
+                            'active': $parent.loaded()
                         }, 
                         style: { 'animation-delay': $parent.loaded() ? '0s' : $index()*100+'ms'}
                     ">

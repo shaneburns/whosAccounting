@@ -1,6 +1,6 @@
 import ko from 'knockout';
 
-import vmBalancer from './vmBlancer';
+import vmBalancer from './vmBalancer';
 
 export default function vmBalancerBoard(settings){
     const self = this;
@@ -18,22 +18,26 @@ export default function vmBalancerBoard(settings){
                 return response.json();
             })
     }
+
     self.getGetVars = function(){
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         self.highlight(JSON.parse(urlParams.get('dateTime')));
     }
+    
     self.init = function(){
         self.getList().then((data)=> {
             self.getGetVars();
-            self.balancers(data.map((e)=> new vmBalancer(e)));
+            self.balancers(((typeof data == "object" && data.length > 0) ? data.map((e)=> new vmBalancer(e)) : []).reverse());
             loader.end('getting list');
 
-            const offset = self.balancers().length*100 + 270;
+            let offset = self.balancers().length*100 + 270;
+            if(self.highlight() && self.highlight().length > 0) offset = Math.min(Math.max(offset, 0), 2800);
             ko.applyBindings(self)
             
             setTimeout(()=> self.loaded(true), offset);
-            if(self.highlight()) setTimeout(()=> document.querySelector('.highlight').scrollIntoView({behavior: 'smooth', block: 'center'}), offset/2)
+            if(self.highlight()) setTimeout(()=> document.querySelector('.highlight').scrollIntoView({behavior: 'smooth', block: 'center'}), offset / 2)
+            
         })
     }();
     return self;

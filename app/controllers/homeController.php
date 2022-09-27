@@ -19,6 +19,10 @@ class homeController extends Controller
         return parent::view('partial/victory');
     }
 
+    function victoryLanding(){
+        return parent::view('partial/victoryLanding');
+    }
+
     function correct(){
         return parent::view('partial/correct');
     }

@@ -28,6 +28,7 @@ export default function vmAccounting(settings){
     self.userInput = ko.observableArray();
     self.scrollTop = ko.observable();
     self.modal = ko.observable();
+    self.answerJSONSub = null;
     
 
 
@@ -52,7 +53,7 @@ export default function vmAccounting(settings){
     // Cookie CRUD
     self.isCookie = (cookieName) => Cookies.get(cookieName) && Cookies.get(cookieName) !== 'undefined';
     self.updateCookie = (cookieName, val, expireIn) => Cookies.set(cookieName, val, {expires: expireIn, path: '' });
-    self.getCookie = () => JSON.parse( self.isCookie(self.cookieName) ? Cookies.get(self.cookieName) : '[]' ).map(userInput => new vmQuestion(userInput, self));
+    self.getCookie = () => JSON.parse( self.isCookie(self.cookieName) ? Cookies.get(self.cookieName) : '[]' );
     self.removeCookie = () => Cookies.remove(self.cookieName, {expires: -1, path: '' });
     self.acceptCookies = function(verdict){
         self.updateCookie(self.acceptanceCookieName, verdict, self.acceptanceExpireIn)
@@ -96,10 +97,6 @@ export default function vmAccounting(settings){
             data: {results: self.answersJSON(), initials: self.initials()},
             success: function (response) {
                 loader.end('sendAnswers');
-                // let r = JSON.parse(response);
-                // if(r && r.success){
-                //     resolve(r.dateTime)
-                // }
             },
             error: function(error){
                 loader.end('sendAnswers');
@@ -147,9 +144,10 @@ export default function vmAccounting(settings){
                 buttons: [{ text: "Next", callback: self.next}]// keep going
             }));
         }else if(self.running()){// Trial completed
-            self.running(false)
-            self.removeCookie();// get rid of the evidence
-            self.currentQuestion().current(false)// remove the 
+            self.running(false)// turn off the oven
+            self.answerJSONSub.dispose(); // dispose of the evidence
+            self.updateCookie(self.cookieName, JSON.stringify('You Win'), self.cookieExpireIn);// make sure they know about it
+            
             // Congratulations all around //
             self.modal(new vmModal({
                 title: "You've Done It!",
@@ -162,8 +160,7 @@ export default function vmAccounting(settings){
                         text: "Send Initials", 
                         callback: () => {
                             self.sendAnswers().then(function(response){// Initials sent and stored
-                                self.removeCookie();
-                                let r = JSON.parse(response);
+                                let r =  JSON.parse(response);
                                 if(r && r.success){
                                     window.open("/balancers?dateTime="+JSON.stringify(r.dateTime), '_blank');
                                 }
@@ -197,9 +194,22 @@ export default function vmAccounting(settings){
      * init                                              |||||||
      */////////////////////////////////////////////////////////
     self.start = function(){
-        self.userInput(self.getCookie()); // Check for cookie containing unfinished answer array
-            
-        self.answersJSON.subscribe( value => {
+        let cookieVal = self.getCookie();
+        if(cookieVal === 'You Win'){
+            self.modal(new vmModal({
+                title: "That's it for now",
+                partialView: '/home/victoryLanding',
+                dismissable: false,
+                buttons: [
+                    {text: 'Reset', callback: ()=> { self.removeCookie(); location.reload(); }}
+                ]
+            }));
+            return;
+        }
+
+        self.userInput(cookieVal.map(userInput => new vmQuestion(userInput, self))); // Check for cookie containing unfinished answer array
+
+        self.answerJSONSub = self.answersJSON.subscribe( value => {
             if(self.acceptanceCookie() === false || self.acceptanceCookie() === 'false') return self.isCookie(self.cookieName) && self.removeCookie()
             self.updateCookie(self.cookieName, value, self.cookieExpireIn)
         }); // update or reject cookie when userInput changes

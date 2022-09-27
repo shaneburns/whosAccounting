@@ -31,10 +31,10 @@ export default function vmQuestion(settings, parent){
      * methods
      */
     self.findMatch = function(input, inputType){
-        // Loop through user answers for cash or accrual type.
+        // Look through all provided input for input type
         let noMatch = 0;
-        let singleAnswer = input instanceof vmEntry;
-        let entries = self.correct_answers.find(el => el.type == (singleAnswer ? input.type : inputType)).entries;
+        let singleAnswer = input instanceof vmEntry; // If singular input object
+        let entries = self.correct_answers.find(el => el.type == (singleAnswer ? input.type : inputType)).entries;// get appropriate entries to check
         
         (singleAnswer ? new Array(input) : ko.isObservableArray(input) ? input() : new Array()).forEach(function(answer){
             // If they are filled out correctly...
@@ -67,7 +67,7 @@ export default function vmQuestion(settings, parent){
             j = self.accrualEntries().findIndex(e=>!e.match());
         i = i >= 0 ? "ul#cash li:nth-of-type("+(i+1)+")" : undefined;
         j = j >= 0 ? "ul#accrual li:nth-of-type("+(j+1)+")" : undefined;
-        let offender =  (i || j) ? document.querySelector((i ?? j) +" input:not(:valid), " + (i ?? j) + " select:not(:valid), " + (i ?? j) + " input:placeholder-shown") || document.querySelector((i ?? j) + " input") : null
+        let offender =  (i || j) ? document.querySelector((i ?? j) +" input:not(:valid), " + (i ?? j) + " select:not(:valid), " + (i ?? j) + " input:placeholder-shown") ?? document.querySelector((i ?? j) + " input:not([disabled])") : null
         return offender != null ? (offender.focus() || true) && offender.scrollIntoView({behavior: 'smooth', block: position }) : (i !== undefined || j !== undefined) ?  setTimeout(self.setEntryFocus, 200) : null;
     };
 
@@ -96,11 +96,11 @@ export default function vmQuestion(settings, parent){
                     }
                     if(self.correct_answers[i].type == 'accrual'){
                         self.accrualEntries.push(new vmEntry({
-                            type: 'accrual',
-                            when: ce.when,
-                            selectedType: ce.type,
-                            dr: ce.Dr,
-                            cr: ce.Cr
+                            type: 'accrual'//,
+                            // when: ce.when,
+                            // selectedType: ce.type,
+                            // dr: ce.Dr,
+                            // cr: ce.Cr
                         }, self));
                     }
                 }
