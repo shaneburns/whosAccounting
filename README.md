@@ -1,14 +1,14 @@
 ![Money Bag](https://accounting.shaneburns.com/images/favicons/base.png)
 
-# whosAccounting - Reclique - Technical Interview
+# whosAccounting - Test
 
 <a href="https://accounting.shaneburns.com/" target="_blank"><image alt="QR Code Link" src="https://accounting.shaneburns.com/images/qrcode.png" width="300"></a>
 
-Scan or click the qr code above to view my solution following <a href="https://reclique.github.io/web-dev-testing/1_accounting_game/" target="_blank">these requirements</a>.
+Scan or click the qr code above to view my solution.
 
 ## Description
 
-A web project that creates an interactive questionnaire from the json structure provided [here](https://reclique.github.io/web-dev-testing/1_accounting_game/questions.json) and checks user input against the given data.  Questions have multiple answers categorized by *cash* and *accrual* entries.  These entries are individually checked for validity and possible matches upon user input; answers can be mass checked with a submit button. Question/Answer groups are paginated, maintained independently, and can be filled out in any order.  Cookies store user input for quick resumption if page is reloaded. User can reject cookie use and maintain core functionality. Upon completing the final question, a user can input their initials and a db record will be made and viewable on [this page](https://accounting.shaneburns.com/balancers). 👏😃
+A web project that creates an interactive questionnaire from the json structure and checks user input against the given data.  Questions have multiple answers categorized by *cash* and *accrual* entries.  These entries are individually checked for validity and possible matches upon user input; answers can be mass checked with a submit button. Question/Answer groups are paginated, maintained independently, and can be filled out in any order.  Cookies store user input for quick resumption if page is reloaded. User can reject cookie use and maintain core functionality. Upon completing the final question, a user can input their initials and a db record will be made and viewable on [this page](https://accounting.shaneburns.com/balancers). 👏😃
 
 ## Tech Stack
 - MySql/MariaDB
