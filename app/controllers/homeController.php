@@ -31,9 +31,8 @@ class homeController extends Controller
 
     function putResults(array $results, string $initials = ''){
         // Results and Initials of player inbound
-        $db = new dbContext();
-        $accounts = new AccountingModels();// Intance AccountingModels to Access the internal preocess
-        $entry = $accounts->EnterInitials($db->ctx, $initials);// Put em down for a winning ticket
+        $accounts = new AccountingModels();// Instantiate AccountingModels to Access the internal preocess
+        $entry = $accounts->EnterInitials($initials);// Put em down for a winning ticket
 
         return new result([ "success" => is_array($entry), "dateTime" => (is_array($entry) ? $entry['dateTime'] : '') ]);
     }
