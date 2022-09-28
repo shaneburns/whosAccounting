@@ -3,7 +3,7 @@ namespace app\controllers;
 use ChemMVC\controller as Controller;
 use ChemCommon\result;
 
-use app\models\AccountingModels;
+use app\models\accountingModels;
 
 class balancersController extends Controller
 {
@@ -12,7 +12,7 @@ class balancersController extends Controller
     }
 
     function allInitials(){
-        $accounts = new AccountingModels();
+        $accounts = new accountingModels();
         $formattedList = $accounts->GetListOfInitials();
         return new result($formattedList);
     }

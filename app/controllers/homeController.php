@@ -5,7 +5,7 @@ use ChemMVC\controller as Controller;
 use ChemCommon\dbContext;
 use ChemCommon\result;
 
-use app\models\AccountingModels;
+use app\models\accountingModels;
 
 class homeController extends Controller
 {
@@ -31,7 +31,7 @@ class homeController extends Controller
 
     function putResults(array $results, string $initials = ''){
         // Results and Initials of player inbound
-        $accounts = new AccountingModels();// Instantiate AccountingModels to Access the internal preocess
+        $accounts = new accountingModels();// Instantiate AccountingModels to Access the internal preocess
         $entry = $accounts->EnterInitials($initials);// Put em down for a winning ticket
 
         return new result([ "success" => is_array($entry), "dateTime" => (is_array($entry) ? $entry['dateTime'] : '') ]);

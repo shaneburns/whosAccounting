@@ -5,7 +5,7 @@ use ChemCommon\dbContext;
 use core\Beans\Balancer;
 use core\Daos\BalancerDao;
 
-class AccountingModels
+class accountingModels
 {
     public function EnterInitials($initials){
         $db = new dbContext();
